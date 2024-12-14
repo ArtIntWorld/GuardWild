@@ -1,0 +1,50 @@
+{% include "admin/header.html" %}
+<form method="post" enctype="multipart/form-data">
+    <h1>Add Animal</h1>
+    <table>
+        <tr>
+            <td>Animal Name</td>
+            <td><input type="text" name="name" id="name" required></td>
+        </tr>
+        <tr>
+            <td>Animal Type</td>
+            <td>
+                <input type="radio" name="type" value="herbivores" required>Herbivores&nbsp;&nbsp;
+                <input type="radio" name="type" value="carnivores" required>Carnivores&nbsp;&nbsp;
+                <input type="radio" name="type" value="omnivores" required>Omnivores&nbsp;&nbsp;
+                <input type="radio" name="type" value="detritivores" required>Detritivores&nbsp;&nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td><textarea name="description" id="description" required></textarea></td>
+        </tr>
+        <tr>
+            <td>Endangered Status</td>
+            <td>
+                <input type="radio" name="endangered_status" value="endangered" required>Endangered&nbsp;&nbsp;
+                <input type="radio" name="endangered_status" value="not endangered" required>Not Endangered
+            </td>
+        </tr>
+        <tr>
+            <td>Risk Level</td>
+            <td>
+                <input type="radio" name="risk" value="high" required>High&nbsp;&nbsp;
+                <input type="radio" name="risk" value="low" required>Low
+            </td>
+        </tr>
+        <tr>
+            <td>Upload Image</td>
+            <td>
+                <input type="file" name="photo" id="photo" required>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Add Data" name="submit">
+                <input type="reset" value="Clear Data" name="reset">
+            </td>
+        </tr>
+    </table>
+</form>
+{% include "admin/footer.html" %}

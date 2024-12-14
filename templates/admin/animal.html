@@ -1,0 +1,28 @@
+{% include "admin/header.html" %}
+<h1>Animal List</h1>
+<table>
+    <tr>
+        <th>Sl No</th>
+        <th>Animal</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Endangered Status</th>
+        <th>Risk Level</th>
+        <th>Photo</th>
+    </tr>
+    {% for i in data %}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.name}}</td>
+        <td>{{i.type}}</td>
+        <td>{{i.description}}</td>
+        <td>{{i.endangered_status}}</td>
+        <td>{{i.risk}}</td>
+        <td><img src="{{ i.photo.url }}" alt="{{ i.name }}"></td>
+        <td><a href="updateanimal/{{i.id}}">Modify</a></td>
+        <td><a href="deleteanimal/{{i.id}}" onclick="return confirm('Are you sure you want to delete {{ i.name }}?');">Remove</a></td>        
+    </tr>
+    {% endfor %}
+</table>
+<a href="addanimal"><input type="button" value="New Animal" id="addanimal"></a>
+{% include "admin/footer.html" %}

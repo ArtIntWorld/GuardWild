@@ -1,0 +1,33 @@
+{% include "admin/header.html" %}
+<form method="post">
+    <h1>Add Division</h1>
+    <table>
+        <tr>
+            <td>Division Name</td>
+            <td><input type="text" name="name" id="name" required></td>
+        </tr>
+        <tr>
+            <td>Established Year</td>
+            <td><input type="text" name="established_year" id="established_year" required></td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td><textarea name="description" id="description"></textarea></td>
+        </tr>
+        <tr>
+            <td>Area Covered</td>
+            <td><input type="text" name="area_covered" id="area_covered" required></td>
+        </tr>
+        <tr>
+            <td>District</td>
+            <td><input type="text" name="district" id="district" required></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Add Data" name="submit">
+                <input type="reset" value="Clear Data" name="reset">
+            </td>
+        </tr>
+    </table>
+</form>
+{% include "admin/footer.html" %}

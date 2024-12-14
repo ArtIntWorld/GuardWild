@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuardWild: Real-Time Animal Species Identification</title>
+    <style>
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 10px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<form action="" method="post" autocomplete="off">
+    <h1>USER</h1>
+    <h2>Personal Information</h2>
+    <table>
+        <tr>
+            <td>Full Name</td>
+            <td><input type="text" name="name" id="name" required></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" title="Please enter a valid Gmail address (e.g., user@gmail.com)"></td>
+        </tr>
+        <tr>
+            <td>Phone Number</td>
+            <td><input type="tel" name="phone" id="phone" required pattern="^\+?[0-9]{1,4}?[-.\s]?[0-9]{1,15}$" title="Please enter a valid phone number. For example: +123-456-7890 or 1234567890"></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" name="password" id="password" required></td>
+        </tr>
+        <tr>
+            <td>Confirm Password</td>
+            <td><input type="password" name="c_password" id="c_password" required></td>
+        </tr>
+    </table>
+    <h2>Location Information</h2>
+    <table>
+        <tr>
+            <td>Street</td>
+            <td><input type="text" name="street" id="street" required></td>
+        </tr>
+        <tr>
+            <td>City</td>
+            <td><input type="text" name="city" id="city" required></td>
+        </tr>
+        <tr>
+            <td>State</td>
+            <td><input type="text" name="state" id="state" required></td>
+        </tr>
+        <tr><td>Postal Code</td>
+            <td><input type="text" name="code" id="code" required></td>
+        </tr>
+        <tr>
+            <td>Country</td>
+            <td><input type="text" name="country" id="country" required></td>
+        </tr>
+        <tr>
+             <!-- Map filling -->
+        </tr>
+    </table>
+    <label>
+        <input type="checkbox" name="agree_terms" required> I agree to the 
+        <a href="javascript:void(0);" id="terms_link">Terms and Conditions</a>
+    </label>
+    <br>
+    <input type="submit" value="Submit" id="submit" disabled>
+    <input type="reset" value="Clear">
+</form>
+
+<div id="termsModal" class="modal">
+
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h1>Terms and Conditions</h1>
+
+    <p>Welcome to the Animal Species Detection System. By using this service, you agree to the following terms. Please read them carefully.</p>
+
+    <p><strong>1. Purpose of the System</strong></p>
+    <p>This system is designed to detect wild animal species in rural areas using audio and visual data from CCTV cameras. Alerts are sent to citizens and forest authorities to improve safety.</p>
+
+    <p><strong>2. User Responsibilities</strong></p>
+    <ul>
+        <li>Provide accurate and up-to-date information when registering.</li>
+        <li>Use the system for its intended purpose—receiving alerts about animal sightings.</li>
+        <li>Follow safety guidelines based on the alerts you receive.</li>
+    </ul>
+
+    <p><strong>3. Privacy and Data Use</strong></p>
+    <p>Your personal information, such as contact details, is collected only to provide the service. CCTV footage and audio data are used solely for animal detection. Your data will be stored securely and will not be shared with third parties unless required by law.</p>
+
+    <p><strong>4. Accuracy of Alerts</strong></p>
+    <p>While we strive for accuracy, the system's animal detection may not always be perfect. Alerts should be used as a guideline, and additional verification from local authorities is recommended in case of an emergency.</p>
+
+    <p><strong>5. Modifications</strong></p>
+    <p>We may update these terms at any time. The updated terms will be posted here, and your continued use of the system will indicate your acceptance of the changes.</p>
+
+    <p><strong>6. Termination</strong></p>
+    <p>We reserve the right to suspend or terminate your access if you violate these terms or misuse the system.</p>
+
+    <p><strong>7. Limitation of Liability</strong></p>
+    <p>We are not responsible for any damages arising from your use of the system, including any reliance on animal detection alerts.</p>
+
+    <p><strong>8. Legal Jurisdiction</strong></p>
+    <p>These terms are governed by the laws of [Insert Jurisdiction]. Any disputes will be resolved in the courts of [Insert Jurisdiction].</p>
+
+    <p>If you have any questions, please contact us at [Insert Contact Information].</p>
+
+    <p><strong>By using this system, you agree to the above terms.</strong></p>
+        </p>
+    </div>
+
+    <script>
+        var modal = document.getElementById("termsModal");
+        var termsLink = document.getElementById("terms_link");
+        var closeModal = document.getElementById("closeModal");
+
+        var checkbox = document.getElementById('agree_terms');
+        var submitBtn = document.getElementById('submit');
+
+        termsLink.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        closeModal.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        document.querySelector('input[name="agree_terms"]').addEventListener('change', function() {
+            document.getElementById('submit').disabled = !this.checked;
+        });
+    </script>
+
+{% include "public/footer.html" %}

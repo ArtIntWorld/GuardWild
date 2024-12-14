@@ -1,0 +1,26 @@
+{% include "admin/header.html" %}
+<h1>Division List</h1>
+<table>
+    <tr>
+        <th>Sl No</th>
+        <th>Division Name</th>
+        <th>Established Year</th>
+        <th>Description</th>
+        <th>Area Covered</th>
+        <th>District</th>
+    </tr>
+    {% for i in data %}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.name}}</td>
+        <td>{{i.established_year}}</td>
+        <td>{{i.description}}</td>
+        <td>{{i.area_covered}}</td>
+        <td>{{i.district}}</td>
+        <td><a href="updatedivision/{{i.id}}">Modify</a></td>
+        <td><a href="deletedivision/{{i.id}}" onclick="return confirm('Are you sure you want to delete {{ i.name }}?');">Remove</a></td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="adddivision"><input type="button" value="New Division" id="adddivision"></a>
+{% include "admin/footer.html" %}

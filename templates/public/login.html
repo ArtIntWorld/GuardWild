@@ -1,0 +1,29 @@
+{% include "public/header.html" %}
+<form method="post">
+    <h1>Login</h1>
+    <table>
+        <tr>
+            <td>Access Type</td>
+            <td><select name="role" id="role">
+                <option value="user">Citizen</option>
+                <option value="admin">Administrator</option>
+                <option value="station">Forest Officer</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="email" name="email" id="email"></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" name="password" id="password"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Confirm" name="submit" id="submit">
+                <input type="reset" value="Clear" name="reset" id="reset">
+            </td>
+        </tr>
+    </table>
+</form>
+{% include "public/footer.html" %}
