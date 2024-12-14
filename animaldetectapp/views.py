@@ -1,8 +1,24 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
 from .models import*
 
 # Create your views here.
+
+def get_states(request):
+    country_id = request.GET.get('country_id')
+    if country_id:
+        states = State.objects.filter(country_id=country_id).values('id', 'name')
+        return JsonResponse(list(states), safe=False)
+    return JsonResponse([], safe=False)
+
+def get_districts(request):
+    state_id = request.GET.get('state_id')
+    if state_id:
+        districts = District.objects.filter(state_id=state_id).values('id', 'name')
+        return JsonResponse(list(districts), safe=False)
+    return JsonResponse([], safe=False)
+
 def index(request):
     if 'submit' in request.POST:
         email=request.POST['email']
@@ -64,16 +80,14 @@ def updateanimal(request,id):
         description=request.POST['description']
         endangered_status=request.POST['endangered_status']
         risk=request.POST['risk']
+        photo=request.FILES['photo']
 
         data.name=name
         data.type=type
         data.description=description
         data.endangered_status=endangered_status
         data.risk=risk
-        if 'photo' in request.FILES:
-            if data.photo:
-                data.photo.delete(save=False)
-            data.photo = request.POST['photo']
+        data.photo = photo
 
         data.save()
         return HttpResponse(f"<script>alert('Animal updated successfully');window.location='/animallist'</script>")
@@ -91,12 +105,14 @@ def divisionlist(request):
 
 def updatedivision(request,id):
     data=ForestDivision.objects.get(id=id)
+    countries=Country.objects.all()
     if 'submit' in request.POST:
         name=request.POST['name']
         established_year=request.POST['established_year']
         description=request.POST['description']
         area_covered=request.POST['area_covered']
-        district=request.POST['district']
+        district_id=request.POST['district']
+        district=District.objects.get(id=district_id)
 
         data.name=name
         data.established_year=established_year
@@ -106,7 +122,7 @@ def updatedivision(request,id):
 
         data.save()
         return HttpResponse(f"<script>alert('Division updated successfully');window.location='/divisionlist'</script>")
-    return render(request,"admin/updatedivision.html",{'data':data})
+    return render(request,"admin/updatedivision.html",{'data':data,'countries':countries})
 
 def deletedivision(request,id):
     data=ForestDivision.objects.get(id=id)
@@ -115,12 +131,14 @@ def deletedivision(request,id):
     return HttpResponse(f"<script>alert('{name} deleted successfully');window.location='/divisionlist'</script>")
 
 def adddivision(request):
+    countries = Country.objects.all()
     if 'submit' in request.POST:
         name=request.POST['name']
         established_year=request.POST['established_year']
         description=request.POST['description']
         area_covered=request.POST['area_covered']
-        district=request.POST['district']
+        district_id = request.POST['district']
+        district = District.objects.get(id=district_id)
 
         if ForestDivision.objects.filter(name=name).exists():
             return HttpResponse(f"<script>alert('{name} exists already');window.location='/adddivision'</script>")
@@ -128,4 +146,5 @@ def adddivision(request):
         f=ForestDivision(name=name,established_year=established_year,description=description,area_covered=area_covered,district=district)
         f.save()
         return HttpResponse(f"<script>alert('Division added successfully');window.location='/divisionlist'</script>")
-    return render(request,"admin/adddivision.html")
+    return render(request,"admin/adddivision.html",{'countries':countries})
+

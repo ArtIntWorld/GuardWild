@@ -31,4 +31,6 @@ urlpatterns = [
     path('updatedivision/<id>',views.updatedivision),
     path('deletedivision/<id>',views.deletedivision),
     path('adddivision',views.adddivision),
+    path('get_states/', views.get_states, name='get_states'),
+    path('get_districts/', views.get_districts, name='get_districts'),
 ]

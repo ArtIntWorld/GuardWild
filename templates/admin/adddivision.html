@@ -19,8 +19,25 @@
             <td><input type="text" name="area_covered" id="area_covered" required></td>
         </tr>
         <tr>
+            <td>Country</td>
+            <td><select id="country" name="country" required>
+                <option value="">Select Country</option>
+                {% for country in countries %}
+                    <option value="{{ country.id }}">{{ country.name }}</option>
+                {% endfor %}
+            </select></td>
+        </tr>
+        <tr>
+            <td>State</td>
+            <td><select id="state" name="state" required>
+                <option value="">Select State</option>
+            </select></td>
+        </tr>
+        <tr>
             <td>District</td>
-            <td><input type="text" name="district" id="district" required></td>
+            <td><select id="district" name="district" required>
+                <option value="">Select District</option>
+            </select></td>
         </tr>
         <tr>
             <td colspan="2">
@@ -30,4 +47,46 @@
         </tr>
     </table>
 </form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Populate states when a country is selected
+        $('#country').change(function () {
+            var countryId = $(this).val();
+            $('#state').empty().append('<option value="">Select State</option>');
+            $('#district').empty().append('<option value="">Select District</option>');
+
+            if (countryId) {
+                $.ajax({
+                    url: '{% url "get_states" %}',
+                    data: { country_id: countryId },
+                    success: function (data) {
+                        data.forEach(function (state) {
+                            $('#state').append('<option value="' + state.id + '">' + state.name + '</option>');
+                        });
+                    }
+                });
+            }
+        });
+
+        // Populate districts when a state is selected
+        $('#state').change(function () {
+            var stateId = $(this).val();
+            $('#district').empty().append('<option value="">Select District</option>');
+
+            if (stateId) {
+                $.ajax({
+                    url: '{% url "get_districts" %}',
+                    data: { state_id: stateId },
+                    success: function (data) {
+                        data.forEach(function (district) {
+                            $('#district').append('<option value="' + district.id + '">' + district.name + '</option>');
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+
 {% include "admin/footer.html" %}

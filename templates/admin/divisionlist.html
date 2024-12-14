@@ -16,7 +16,7 @@
         <td>{{i.established_year}}</td>
         <td>{{i.description}}</td>
         <td>{{i.area_covered}}</td>
-        <td>{{i.district}}</td>
+        <td>{{i.district.name}}</td>
         <td><a href="updatedivision/{{i.id}}">Modify</a></td>
         <td><a href="deletedivision/{{i.id}}" onclick="return confirm('Are you sure you want to delete {{ i.name }}?');">Remove</a></td>
     </tr>
