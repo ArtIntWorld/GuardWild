@@ -18,18 +18,6 @@ With the increasing frequency of **wildlife-human conflict (WHC)**, particularly
 3. **Alert System**: Once an animal intrusion is detected, alerts are sent to users via an app. These alerts include GPS data to help target specific regions.
 4. **Data and GPS Integration**: The system can use GPS coordinates from the CCTV cameras to target specific geographic locations, sending relevant alerts to users in the affected area.
 
-## Installation
-
-### Requirements
-- Python 3.x
-- Libraries: 
-  - TensorFlow (for ResNet50 model)
-  - scikit-learn (for Random Forest model)
-  - OpenCV (for processing CCTV footage)
-  - NumPy
-  - pandas
-  - librosa (for audio processing)
-
 ### Setup Instructions
 1. Clone the repository:
    ```bash
