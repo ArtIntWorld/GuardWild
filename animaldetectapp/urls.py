@@ -33,4 +33,9 @@ urlpatterns = [
     path('adddivision',views.adddivision),
     path('get_states/', views.get_states, name='get_states'),
     path('get_districts/', views.get_districts, name='get_districts'),
+
+
+    #---------------------------------------------------------------------------------
+    #---------------------------------------------------------------------------------
+    #path('map',views.map_view),
 ]

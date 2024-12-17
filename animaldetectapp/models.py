@@ -33,17 +33,19 @@ class User(models.Model):
 class Animals(models.Model):
     name=models.CharField(max_length=100)
     type=models.CharField(max_length=100)
-    photo=models.ImageField(upload_to='animals/')
-    description=models.CharField(max_length=100)
+    photo=models.CharField(max_length=200)
+    description=models.CharField(max_length=500)
     endangered_status=models.CharField(max_length=100)
     risk=models.CharField(max_length=100)
 
 class ForestDivision(models.Model):
     name=models.CharField(max_length=100)
     established_year=models.CharField(max_length=100)
-    description=models.CharField(max_length=100)
+    description=models.CharField(max_length=500)
     area_covered=models.CharField(max_length=100)
     district=models.ForeignKey(District,on_delete=models.CASCADE)
 
-
+class ForestStation(models.Model):
+    name=models.CharField(max_length=100)
+    
     

@@ -4,19 +4,19 @@
     <table>
         <tr>
             <td>Division Name</td>
-            <td><input type="text" name="name" id="name" value="{{data.name}}" required></td>
+            <td><input type="text" name="name" id="name" value="{{ data.name }}" required></td>
         </tr>
         <tr>
             <td>Established Year</td>
-            <td><input type="text" name="established_year" id="established_year" value="{{data.established_year}}" required></td>
+            <td><input type="text" name="established_year" id="established_year" value="{{ data.established_year }}" required></td>
         </tr>
         <tr>
             <td>Description</td>
-            <td><textarea name="description" id="description">{{data.description}}</textarea></td>
+            <td><textarea name="description" id="description">{{ data.description }}</textarea></td>
         </tr>
         <tr>
             <td>Area Covered</td>
-            <td><input type="text" name="area_covered" id="area_covered" value="{{data.area_covered}}" required></td>
+            <td><input type="text" name="area_covered" id="area_covered" value="{{ data.area_covered }}" required></td>
         </tr>
         <tr>
             <td>Country</td>
@@ -29,25 +29,21 @@
         </tr>
         <tr>
             <td>State</td>
-            <td>
-                <select id="state" name="state" required>
-                    <option value="">Select State</option>
-                    {% for state in data.district.state.country.state_set.all %}
-                        <option value="{{ state.id }}" {% if state.id == data.district.state.id %}selected{% endif %}>{{ state.name }}</option>
-                    {% endfor %}
-                </select>
-            </td>
+            <td><select id="state" name="state" required>
+                <option value="">Select State</option>
+                {% for state in states %}
+                    <option value="{{ state.id }}" {% if state.id == data.district.state.id %}selected{% endif %}>{{ state.name }}</option>
+                {% endfor %}
+            </select></td>
         </tr>
         <tr>
             <td>District</td>
-            <td>
-                <select id="district" name="district" required>
-                    <option value="">Select District</option>
-                    {% for district in data.district.state.district_set.all %}
-                        <option value="{{ district.id }}" {% if district.id == data.district.id %}selected{% endif %}>{{ district.name }}</option>
-                    {% endfor %}
-                </select>
-            </td>
+            <td><select id="district" name="district" required>
+                <option value="">Select District</option>
+                {% for district in districts %}
+                    <option value="{{ district.id }}" {% if district.id == data.district.id %}selected{% endif %}>{{ district.name }}</option>
+                {% endfor %}
+            </select></td>
         </tr>
         <tr>
             <td colspan="2">
@@ -58,62 +54,45 @@
     </table>
 </form>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Trigger when country changes
+        // Populate states when a country is selected
         $('#country').change(function () {
             var countryId = $(this).val();
             $('#state').empty().append('<option value="">Select State</option>');
             $('#district').empty().append('<option value="">Select District</option>');
-            
+
             if (countryId) {
                 $.ajax({
-                    url: '{% url "get_states" %}',  // URL for fetching states
+                    url: '{% url "get_states" %}',
                     data: { country_id: countryId },
                     success: function (data) {
                         data.forEach(function (state) {
                             $('#state').append('<option value="' + state.id + '">' + state.name + '</option>');
                         });
-
-                        // Pre-select the previously selected state
-                        var selectedState = "{{ data.district.state.id }}";
-                        if (selectedState) {
-                            $('#state').val(selectedState).trigger('change');
-                        }
                     }
                 });
             }
         });
 
-        // Trigger when state changes
+        // Populate districts when a state is selected
         $('#state').change(function () {
             var stateId = $(this).val();
             $('#district').empty().append('<option value="">Select District</option>');
-            
+
             if (stateId) {
                 $.ajax({
-                    url: '{% url "get_districts" %}',  // URL for fetching districts
+                    url: '{% url "get_districts" %}',
                     data: { state_id: stateId },
                     success: function (data) {
                         data.forEach(function (district) {
                             $('#district').append('<option value="' + district.id + '">' + district.name + '</option>');
                         });
-
-                        // Pre-select the previously selected district
-                        var selectedDistrict = "{{ data.district.id }}";
-                        if (selectedDistrict) {
-                            $('#district').val(selectedDistrict);
-                        }
                     }
                 });
             }
         });
-
-        // Trigger the country change on page load to pre-populate states and districts
-        var countryId = "{{ data.district.state.country.id }}";
-        if (countryId) {
-            $('#country').val(countryId).trigger('change');
-        }
     });
 </script>
 

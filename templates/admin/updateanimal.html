@@ -1,5 +1,5 @@
 {% include "admin/header.html" %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <h1>Update Animal</h1>
     <table>
         <tr>
@@ -36,7 +36,7 @@
         <tr>
             <td>Upload Image</td>
             <td>
-                <input type="file" name="photo" id="photo">
+                <input type="file" name="photo" id="photo" value="{{data.photo}}">
             </td>
         </tr>
         <tr>
