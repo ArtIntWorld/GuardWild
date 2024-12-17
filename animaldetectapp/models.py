@@ -47,5 +47,14 @@ class ForestDivision(models.Model):
 
 class ForestStation(models.Model):
     name=models.CharField(max_length=100)
-    
+    head=models.CharField(max_length=100)
+    email=models.CharField(max_length=100)
+    phone=models.CharField(max_length=100)
+    lattitude=models.CharField(max_length=100)
+    longitude=models.CharField(max_length=100)
+    proof=models.CharField(max_length=100)
+    division=models.CharField(max_length=100)
+    status=models.CharField(max_length=100)
+    staff_count=models.CharField(max_length=100)
+
     

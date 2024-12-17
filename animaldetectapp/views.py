@@ -57,7 +57,7 @@ def login(request):
     return render(request,'public/login.html')
 
 def animallist(request):
-    data=Animals.objects.all()
+    data=Animals.objects.all().order_by('name')
     return render(request,"admin/animal.html",{'data':data})
 
 def addanimal(request):
@@ -69,14 +69,14 @@ def addanimal(request):
         risk=request.POST['risk']
         photo=request.FILES['photo']
 
-        date=datetime.datetime.now().strftime("%Y%m%d-%H%M%S")+".jpg"
-        fs = FileSystemStorage() 
+        date=name+datetime.datetime.now().strftime("%Y%m%d-%H%M%S")+".jpg"
+        fs = FileSystemStorage(location='media/animals/')
         fa = fs.save(date, photo)
 
         if Animals.objects.filter(name=name).exists():
             return HttpResponse(f"<script>alert('{name} exists already');window.location='/addanimal'</script>")
         
-        a=Animals(name=name,endangered_status=endangered_status,risk=risk,type=type,description=description,photo=fs.url(fa))
+        a=Animals(name=name,endangered_status=endangered_status,risk=risk,type=type,description=description,photo=f"media/animals/{fa}")
         a.save()
         return HttpResponse(f"<script>alert('Animal added successfully');window.location='/animallist'</script>")
     return render(request,"admin/addanimal.html")
@@ -98,10 +98,10 @@ def updateanimal(request,id):
         
         if 'photo' in request.FILES:
             photo=request.FILES['photo']
-            date=datetime.datetime.now().strftime("%y%m%d-%H%M%S")+".jpg"
-            fs = FileSystemStorage() 
-            fp = fs.save(date, photo)
-            data.photo=fs.url(fp)
+            date=name+datetime.datetime.now().strftime("%y%m%d-%H%M%S")+".jpg"
+            fs = FileSystemStorage(location='media/animals/') 
+            fa = fs.save(date, photo)
+            data.photo=f"media/animals/{fa}"
 
         data.save()
         return HttpResponse(f"<script>alert('Animal updated successfully');window.location='/animallist'</script>")
@@ -174,26 +174,3 @@ def adddivision(request):
         return HttpResponse(f"<script>alert('Division added successfully');window.location='/divisionlist'</script>")
     return render(request,"admin/adddivision.html",{'countries':countries})
 
-
-
-
-
-
-
-
-
-#----------------------------------------------------------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------------------------------------------------------
-import googlemaps
-
-# Initialize Google Maps client with your API key
-gmaps = googlemaps.Client(key='AIzaSyApIANMRe7XkOopSo7273ggyNoeosbufBw')
-
-def get_coordinates(location):
-    geocode_result = gmaps.geocode(location)
-    if geocode_result:
-        # Extract latitude and longitude from the first result
-        latitude = geocode_result[0]['geometry']['location']['lat']
-        longitude = geocode_result[0]['geometry']['location']['lng']
-        return latitude, longitude
-    return None, None
