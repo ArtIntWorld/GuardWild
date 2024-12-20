@@ -1,0 +1,152 @@
+{% include "public/header.html" %}
+
+<form method="post" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <td>Station Name</td>
+            <td><input type="text" name="name" required></td>
+        </tr>
+        <tr>
+            <td>Station Head</td>
+            <td><input type="text" name="head" required></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="email" name="email" id="email" required pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" title="Please enter a valid Gmail address (e.g., user@gmail.com)"></td>
+        </tr>
+        <tr>
+            <td>Contact</td>
+            <td><input type="tel" name="phone" id="phone" required pattern="^\+?[0-9]{1,4}?[-.\s]?[0-9]{1,15}$" title="Please enter a valid phone number. For example: +123-456-7890 or 1234567890"></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input type="password" name="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="Password must be at least 8 characters long, include at least one letter, one number, and one special character (@, $, !, %, *, ?, &)."></td>
+        </tr>
+        <tr>
+            <td>Confirm Password</td>
+            <td><input type="password" name="confirmpassword" required></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Country</td>
+            <td><select id="country" name="country" required>
+                <option value="">Select Country</option>
+                {% for country in countries %}
+                    <option value="{{ country.id }}">{{ country.name }}</option>
+                {% endfor %}
+            </select></td>
+        </tr>
+        <tr>
+            <td>State</td>
+            <td><select id="state" name="state" required>
+                <option value="">Select State</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td>District</td>
+            <td><select id="district" name="district" required>
+                <option value="">Select District</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td>Division</td>
+            <td><select id="division" name="division" required>
+                <option value="">Select Division</option>
+            </select></td>
+        </tr>
+        <tr>
+            <td>Proof</td>
+            <td><input type="file" name="proof"></td>
+        </tr>
+        <tr>
+            <td>Staff Count</td>
+            <td><input type="number" name="staff_count"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Add Data" name="submit">
+                <input type="reset" value="Clear Data" name="reset">
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        
+        $('#country').change(function () {
+            var countryId = $(this).val();
+            $('#state').empty().append('<option value="">Select State</option>');
+            $('#district').empty().append('<option value="">Select District</option>');
+            $('#division').empty().append('<option value="">Select Division</option>');
+
+            if (countryId) {
+                $.ajax({
+                    url: '{% url "get_states" %}',
+                    data: { country_id: countryId },
+                    success: function (data) {
+                        data.forEach(function (state) {
+                            $('#state').append('<option value="' + state.id + '">' + state.name + '</option>');
+                        });
+                    }
+                });
+            }
+        });
+
+        
+        $('#state').change(function () {
+            var stateId = $(this).val();
+            $('#district').empty().append('<option value="">Select District</option>');
+            $('#division').empty().append('<option value="">Select Division</option>');
+
+            if (stateId) {
+                $.ajax({
+                    url: '{% url "get_districts" %}',
+                    data: { state_id: stateId },
+                    success: function (data) {
+                        data.forEach(function (district) {
+                            $('#district').append('<option value="' + district.id + '">' + district.name + '</option>');
+                        });
+                    }
+                });
+            }
+        });
+
+        $('#district').change(function () {
+            var districtId = $(this).val();
+            $('#division').empty().append('<option value="">Select Division</option>');
+
+            if (districtId) {
+                $.ajax({
+                    url: '{% url "get_divisions" %}',
+                    data: { district_id: districtId },
+                    success: function (data) {
+                        data.forEach(function (forestdivision) {
+                            $('#division').append('<option value="' + forestdivision.id + '">' + forestdivision.name + '</option>');
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<script>
+    const form = document.getElementsByTagName('form')[0];
+    const password = document.getElementsByName('password')[0];
+    const confirmpassword = document.getElementsByName('confirmpassword')[0];
+
+    form.addEventListener('submit', function (event) {
+        if (password.value !== confirmpassword.value) {
+            event.preventDefault();
+            alert("Passwords do not match. Please try again.");
+            confirmpassword.value = ""; 
+        }
+    });
+</script>
+
+{% include "public/footer.html" %}

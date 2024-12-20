@@ -8,20 +8,24 @@ from django.core.files.storage import FileSystemStorage
 # Create your views here.
 
 def get_states(request):
-    country_id = request.GET.get('country_id')
+    country_id=request.GET.get('country_id')
     if country_id:
-        # Fetch states that belong to the selected country
-        states = State.objects.filter(country_id=country_id).values('id', 'name')
+        states=State.objects.filter(country_id=country_id).values('id', 'name')
         return JsonResponse(list(states), safe=False)
     return JsonResponse([], safe=False)
 
-# View to fetch districts based on the selected state
 def get_districts(request):
-    state_id = request.GET.get('state_id')
+    state_id=request.GET.get('state_id')
     if state_id:
-        # Fetch districts that belong to the selected state
-        districts = District.objects.filter(state_id=state_id).values('id', 'name')
+        districts=District.objects.filter(state_id=state_id).values('id', 'name')
         return JsonResponse(list(districts), safe=False)
+    return JsonResponse([], safe=False)
+
+def get_divisions(request):
+    district_id=request.GET.get('district_id')
+    if district_id:
+        divisions=ForestDivision.objects.filter(district_id=district_id).values('id', 'name')
+        return JsonResponse(list(divisions), safe=False)
     return JsonResponse([], safe=False)
 
 def index(request):
@@ -42,10 +46,10 @@ def admin(request):
 
 def login(request):
     if 'submit' in request.POST:
-        email = request.POST['email']
-        password = request.POST['password']
+        email=request.POST['email']
+        password=request.POST['password']
         if Login.objects.filter(email=email,password=password).exists():
-            res = Login.objects.get(email=email)
+            res=Login.objects.get(email=email)
             request.session['login_id']=res.pk
             login_id=request.session['login_id']
 
@@ -99,8 +103,8 @@ def updateanimal(request,id):
         if 'photo' in request.FILES:
             photo=request.FILES['photo']
             date=name+datetime.datetime.now().strftime("%y%m%d-%H%M%S")+".jpg"
-            fs = FileSystemStorage(location='media/animals/') 
-            fa = fs.save(date, photo)
+            fs=FileSystemStorage(location='media/animals/') 
+            fa=fs.save(date, photo)
             data.photo=f"media/animals/{fa}"
 
         data.save()
@@ -123,18 +127,18 @@ def updatedivision(request, id):
     countries = Country.objects.all()
 
     if 'submit' in request.POST:
-        name = request.POST['name']
-        established_year = request.POST['established_year']
-        description = request.POST['description']
-        area_covered = request.POST['area_covered']
-        district_id = request.POST['district']
-        district = District.objects.get(id=district_id)
+        name=request.POST['name']
+        established_year=request.POST['established_year']
+        description=request.POST['description']
+        area_covered=request.POST['area_covered']
+        district_id=request.POST['district']
+        district=District.objects.get(id=district_id)
 
-        data.name = name
-        data.established_year = established_year
-        data.description = description
-        data.area_covered = area_covered
-        data.district = district
+        data.name=name
+        data.established_year=established_year
+        data.description=description
+        data.area_covered=area_covered
+        data.district=district
 
         data.save()
 
@@ -174,3 +178,30 @@ def adddivision(request):
         return HttpResponse(f"<script>alert('Division added successfully');window.location='/divisionlist'</script>")
     return render(request,"admin/adddivision.html",{'countries':countries})
 
+def register_station(request):
+    countries = Country.objects.all()
+    if 'submit' in request.POST:
+        name=request.POST['name']
+        email=request.POST['email']
+
+        if ForestStation.objects.filter(email=email).exists():
+            return HttpResponse(f"<script>alert('{name} exists already');window.location='/register_station'</script>")
+
+        head=request.POST['head']
+        phone=request.POST['phone']
+        division_id=request.POST['division']
+        division=ForestDivision.objects.get(id=division_id)
+        password=request.POST['password']
+        staff_count=request.POST['staff_count']
+
+
+        proof=request.FILES['proof']
+        date=name+datetime.datetime.now().strftime("%Y%m%d-%H%M%S")+".jpg"
+        fs = FileSystemStorage(location='media/station/')
+        fa = fs.save(date, proof)
+        
+        f=ForestStation(name=name,head=head,email=email,phone=phone,division=division,password=password,proof=f"media/station/{fa}",staff_count=staff_count,status='pending')
+        f.save()
+        return HttpResponse(f"<script>alert('Division added successfully');window.location='/login'</script>")
+
+    return render(request,"public/station_register.html",{'countries':countries})

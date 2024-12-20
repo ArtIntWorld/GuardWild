@@ -62,7 +62,7 @@
         </tr>
         <tr>
             <td>Password</td>
-            <td><input type="password" name="password" id="password" required></td>
+            <td><input type="password" name="password" id="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="Password must be at least 8 characters long, include at least one letter, one number, and one special character (@, $, !, %, *, ?, &)."></td>
         </tr>
         <tr>
             <td>Confirm Password</td>

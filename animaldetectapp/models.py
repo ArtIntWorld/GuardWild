@@ -56,5 +56,6 @@ class ForestStation(models.Model):
     division=models.CharField(max_length=100)
     status=models.CharField(max_length=100)
     staff_count=models.CharField(max_length=100)
+    password=models.CharField(max_length=100)
 
     

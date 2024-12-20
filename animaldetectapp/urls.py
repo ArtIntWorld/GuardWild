@@ -19,10 +19,18 @@ from django.urls import path
 from .import views
 
 urlpatterns = [
+    #--------------------COMMON PAGE--------------------#
     path('',views.index),
     path('signup',views.signup),
     path('login',views.login),
     path('admin',views.admin),
+    path('register_station',views.register_station),
+
+    #--------------------PLACE SELECTION DROP-DOWN--------------------#
+    path('get_states/', views.get_states, name='get_states'),
+    path('get_districts/', views.get_districts, name='get_districts'),
+
+    #--------------------ADMIN PAGE--------------------#
     path('animallist',views.animallist),
     path('addanimal',views.addanimal),
     path('updateanimal/<id>',views.updateanimal),
@@ -31,11 +39,8 @@ urlpatterns = [
     path('updatedivision/<id>',views.updatedivision),
     path('deletedivision/<id>',views.deletedivision),
     path('adddivision',views.adddivision),
-    path('get_states/', views.get_states, name='get_states'),
-    path('get_districts/', views.get_districts, name='get_districts'),
 
-
-    #---------------------------------------------------------------------------------
-    #---------------------------------------------------------------------------------
-    #path('map',views.map_view),
+    #--------------------STATION PAGE--------------------#
+    path('get_divisions/', views.get_divisions, name='get_divisions'),
+    path('register_station',views.register_station),
 ]
