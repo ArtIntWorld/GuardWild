@@ -19,16 +19,18 @@ from django.urls import path
 from .import views
 
 urlpatterns = [
+
+    #--------------------PLACE SELECTION DROP-DOWN--------------------#
+    path('get_states/', views.get_states, name='get_states'),
+    path('get_districts/', views.get_districts, name='get_districts'),
+    path('get_divisions/', views.get_divisions, name='get_divisions'),
+
     #--------------------COMMON PAGE--------------------#
     path('',views.index),
     path('signup',views.signup),
     path('login',views.login),
     path('admin',views.admin),
     path('register_station',views.register_station),
-
-    #--------------------PLACE SELECTION DROP-DOWN--------------------#
-    path('get_states/', views.get_states, name='get_states'),
-    path('get_districts/', views.get_districts, name='get_districts'),
 
     #--------------------ADMIN PAGE--------------------#
     path('animallist',views.animallist),
@@ -39,8 +41,12 @@ urlpatterns = [
     path('updatedivision/<id>',views.updatedivision),
     path('deletedivision/<id>',views.deletedivision),
     path('adddivision',views.adddivision),
+    path('pending_station',views.acceptorreject_station),
+    path('approvestation/<id>',views.approvestation),
+    path('deletestation/<id>',views.deletestation),
+    path('stationlist',views.stationlist),
 
     #--------------------STATION PAGE--------------------#
-    path('get_divisions/', views.get_divisions, name='get_divisions'),
-    path('register_station',views.register_station),
+    path('station',views.station),
+    path('station_profile',views.stationprofile),
 ]

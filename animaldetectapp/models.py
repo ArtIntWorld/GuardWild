@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class Login(models.Model):
-    username=models.CharField(max_length=100)
+    name=models.CharField(max_length=100)
     password=models.CharField(max_length=100)
     usertype=models.CharField(max_length=100)
     email=models.CharField(max_length=100)
@@ -46,6 +46,7 @@ class ForestDivision(models.Model):
     district=models.ForeignKey(District,on_delete=models.CASCADE)
 
 class ForestStation(models.Model):
+    login=models.ForeignKey(Login,on_delete=models.CASCADE)
     name=models.CharField(max_length=100)
     head=models.CharField(max_length=100)
     email=models.CharField(max_length=100)
@@ -53,9 +54,11 @@ class ForestStation(models.Model):
     lattitude=models.CharField(max_length=100)
     longitude=models.CharField(max_length=100)
     proof=models.CharField(max_length=100)
-    division=models.CharField(max_length=100)
+    division=models.ForeignKey(ForestDivision,on_delete=models.CASCADE)
     status=models.CharField(max_length=100)
     staff_count=models.CharField(max_length=100)
     password=models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     

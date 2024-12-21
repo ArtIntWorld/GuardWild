@@ -7,6 +7,8 @@ from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 
+#----------------------------DROPDOWN FNC----------------------------#
+
 def get_states(request):
     country_id=request.GET.get('country_id')
     if country_id:
@@ -28,37 +30,76 @@ def get_divisions(request):
         return JsonResponse(list(divisions), safe=False)
     return JsonResponse([], safe=False)
 
-def index(request):
-    if 'submit' in request.POST:
-        email=request.POST['email']
-        password=request.POST['password']
-        role=request.POST['role']
-        if Login.objects.filter(email=email,password=password).exists():
-            res=Login.objects.get(email=email)
-
-    return render(request,"public/index.html")
-
-def signup(request):
-    return render(request,"public/sign_up.html")
-
-def admin(request):
-    return render(request,"admin/admin.html")
+#----------------------------PUBLIC PAGE----------------------------#
 
 def login(request):
     if 'submit' in request.POST:
         email=request.POST['email']
         password=request.POST['password']
-        if Login.objects.filter(email=email,password=password).exists():
-            res=Login.objects.get(email=email)
+        usertype=request.POST['role']
+        if Login.objects.filter(email=email,password=password,usertype=usertype).exists():
+            res=Login.objects.get(email=email,usertype=usertype)
             request.session['login_id']=res.pk
             login_id=request.session['login_id']
 
             if res.usertype =='admin':
                 request.session['log']="in"
                 return HttpResponse(f"<script>alert('welcome Admin');window.location='admin'</script>")
+            elif res.usertype == 'station':
+                if ForestStation.objects.filter(login_id=login_id).exists():
+                    res_station=ForestStation.objects.get(login_id=login_id)
+                    if res_station:
+                        request.session['log']="in"
+                        request.session['foreststation_id']=res_station.pk
+                        print(f"{res_station.name}")
+                    return HttpResponse(f"<script>alert('welcome Officer');window.location='station'</script>")
         else:
-            return HttpResponse(f"<script>alert('invalid username or password');window.location='login'</script>")
+            return HttpResponse(f"<script>alert('Invalid username or password');window.location='login'</script>")
     return render(request,'public/login.html')
+
+def index(request):
+    return render(request,"public/index.html")
+
+def signup(request):
+    return render(request,"public/sign_up.html")
+
+def register_station(request):
+    countries = Country.objects.all()
+    if 'submit' in request.POST:
+        name=request.POST['name']
+        email=request.POST['email']
+
+        if ForestStation.objects.filter(email=email).exists():
+            return HttpResponse(f"<script>alert('{name} exists already');window.location='/register_station'</script>")
+
+        head=request.POST['head']
+        phone=request.POST['phone']
+        division_id=request.POST['division']
+        division=ForestDivision.objects.get(id=division_id)
+        password=request.POST['password']
+        staff_count=request.POST['staff_count']
+        proof=request.FILES['proof']
+
+        file_extension = proof.name.split('.')[-1].lower()
+
+        date = name + '.' + file_extension
+        
+        fs = FileSystemStorage(location='media/station/')
+        fa = fs.save(date, proof)
+
+        l=Login(name=name,email=email,password=password,usertype='pending')
+        l.save()
+
+        f=ForestStation(name=name,head=head,email=email,phone=phone,division=division,password=password,proof=f"media/station/{fa}",staff_count=staff_count,status='pending',login=l)
+        f.save()
+        return HttpResponse(f"<script>alert('Division added successfully');window.location='/login'</script>")
+
+    return render(request,"public/station_register.html",{'countries':countries})
+
+#----------------------------ADMIN PAGE----------------------------#
+
+def admin(request):
+    return render(request,"admin/admin.html")
 
 def animallist(request):
     data=Animals.objects.all().order_by('name')
@@ -73,7 +114,9 @@ def addanimal(request):
         risk=request.POST['risk']
         photo=request.FILES['photo']
 
-        date=name+datetime.datetime.now().strftime("%Y%m%d-%H%M%S")+".jpg"
+        file_extension = photo.name.split('.')[-1].lower()
+        date = name + '.' + file_extension
+
         fs = FileSystemStorage(location='media/animals/')
         fa = fs.save(date, photo)
 
@@ -102,7 +145,8 @@ def updateanimal(request,id):
         
         if 'photo' in request.FILES:
             photo=request.FILES['photo']
-            date=name+datetime.datetime.now().strftime("%y%m%d-%H%M%S")+".jpg"
+            file_extension = photo.name.split('.')[-1].lower()
+            date = name + '.' + file_extension
             fs=FileSystemStorage(location='media/animals/') 
             fa=fs.save(date, photo)
             data.photo=f"media/animals/{fa}"
@@ -178,30 +222,45 @@ def adddivision(request):
         return HttpResponse(f"<script>alert('Division added successfully');window.location='/divisionlist'</script>")
     return render(request,"admin/adddivision.html",{'countries':countries})
 
-def register_station(request):
-    countries = Country.objects.all()
-    if 'submit' in request.POST:
-        name=request.POST['name']
-        email=request.POST['email']
+def acceptorreject_station(request):
+    data=ForestStation.objects.filter(status='pending')
+    return render(request,"admin/pending_station.html",{'data':data})
 
-        if ForestStation.objects.filter(email=email).exists():
-            return HttpResponse(f"<script>alert('{name} exists already');window.location='/register_station'</script>")
+def approvestation(request,id):
+    data=ForestStation.objects.get(id=id)
+    data.status='active'
 
-        head=request.POST['head']
-        phone=request.POST['phone']
-        division_id=request.POST['division']
-        division=ForestDivision.objects.get(id=division_id)
-        password=request.POST['password']
-        staff_count=request.POST['staff_count']
+    name=data.name
+    email=data.email
+    password=data.password
+    usertype='station'
 
+    l=Login(name=name,email=email,password=password,usertype=usertype)
+    l.save()
+    data.save()
 
-        proof=request.FILES['proof']
-        date=name+datetime.datetime.now().strftime("%Y%m%d-%H%M%S")+".jpg"
-        fs = FileSystemStorage(location='media/station/')
-        fa = fs.save(date, proof)
-        
-        f=ForestStation(name=name,head=head,email=email,phone=phone,division=division,password=password,proof=f"media/station/{fa}",staff_count=staff_count,status='pending')
-        f.save()
-        return HttpResponse(f"<script>alert('Division added successfully');window.location='/login'</script>")
+    return HttpResponse(f"<script>alert('{name} accepted successfully');window.location='/pending_station'</script>")
 
-    return render(request,"public/station_register.html",{'countries':countries})
+def deletestation(request,id):
+    data=ForestStation.objects.get(id=id)
+    name=data.name
+    status=data.status
+    data.delete()
+    if status == 'pending':
+        return HttpResponse(f"<script>alert('{name} rejected successfully');window.location='/pending_station'</script>")
+    elif status == 'active':
+        return HttpResponse(f"<script>alert('{name} deleted successfully');window.location='/stationlist'</script>")
+    
+def stationlist(request):
+    data=ForestStation.objects.filter(status='active')
+    return render(request,"admin/stationlist.html",{'data':data})
+
+#----------------------------STATION PAGE----------------------------#
+
+def station(request):
+    return render(request,"forest_station/station.html")
+
+def stationprofile(request):
+    station_id=request.session['foreststation_id']
+    data=ForestStation.objects.get(id=station_id)
+    return render(request,"forest_station/profile.html",{'data':data})

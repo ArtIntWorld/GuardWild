@@ -1,0 +1,35 @@
+{% include "admin/header.html" %}
+<h1>Pending Forest Station</h1>
+<table>
+    <tr>
+        <th>Sl No</th>
+        <th>Name</th>
+        <th>Head</th>
+        <th>Email</th>
+        <th>Contact</th>
+        <th>Division</th>
+        <th>Staff Count</th>
+        <th>Proof</th>
+        <th></th>
+        <th>Created</th>
+        <th>Modified</th>
+    </tr>
+    <tr>
+        {% for i in data %}
+        <td>{{forloop.counter}}</td>
+        <td>{{i.name}}</td>
+        <td>{{i.head}}</td>
+        <td>{{i.email}}</td>
+        <td>{{i.phone}}</td>
+        <td>{{i.division.name}}, {{i.division.district.name}}</td>
+        <td>{{i.staff_count}}</td>
+        <td><a href="{{i.proof}}" download="{{i.name}}">Download</a></td>
+        <td></td>
+        <td>{{i.created_at}}</td>
+        <td>{{i.updated_at}}</td>
+        <td><a href="approvestation/{{i.id}}">Accept</a></td>
+        <td><a href="deletestation/{{i.id}}" onclick="return confirm('Are you sure you want to reject {{ i.name }}?');">Reject</a></td>
+        </tr>
+        {% endfor %}
+</table>
+{% include "admin/footer.html" %}

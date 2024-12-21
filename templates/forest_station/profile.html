@@ -1,0 +1,39 @@
+{% include "forest_station/header.html" %}
+
+<h1>Profile</h1>
+<table>
+    <tr>
+        <td>Station Name</td>
+        <td>{{data.name}}</td>
+    </tr>
+    <tr>
+        <td>Station Head</td>
+        <td>{{data.head}}</td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td>{{data.email}}</td>
+    </tr>
+    <tr>
+        <td>Contact</td>
+        <td>{{data.phone}}</td>
+    </tr>
+    <tr>
+        <td>Proof</td>
+        <td><a href="{{data.proof}}" download="{{data.name}}">Download</a></td>
+    </tr>
+    <tr>
+        <td>Division</td>
+        <td>{{data.division.name}},<br>{{data.division.district.name}}</td>
+    </tr>
+    <tr>
+        <td>Staff Count</td>
+        <td>{{data.staff_count}}</td>
+    </tr>
+    <tr>
+        <td>Password</td>
+        <td>{{data.password}}</td>
+    </tr>
+</table>
+
+{% include "forest_station/footer.html" %}
