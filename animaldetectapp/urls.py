@@ -26,9 +26,11 @@ urlpatterns = [
     path('get_divisions/', views.get_divisions, name='get_divisions'),
 
     #--------------------COMMON PAGE--------------------#
+    path('public', views.public),
     path('',views.index),
     path('signup',views.signup),
-    path('login',views.login),
+    path('logout/',views.logout, name='logout'),
+    path('login',views.login, name='login'),
     path('admin',views.admin),
     path('register_station',views.register_station),
 

@@ -18,7 +18,7 @@
         <td>{{i.description}}</td>
         <td>{{i.endangered_status}}</td>
         <td>{{i.risk}}</td>
-        <td><img src="{{ i.photo }}" alt="{{ i.name }}" width="100" height="100"></td>
+        <td><img src="{{i.photo}}" alt="{{i.name}}" width="100" height="100"></td>
         <td><a href="updateanimal/{{i.id}}">Modify</a></td>
         <td><a href="deleteanimal/{{i.id}}" onclick="return confirm('Are you sure you want to delete {{ i.name }}?');">Remove</a></td>        
     </tr>

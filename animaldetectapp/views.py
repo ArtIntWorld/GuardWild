@@ -1,7 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import*
+
 import datetime
 from django.core.files.storage import FileSystemStorage
 
@@ -31,6 +36,9 @@ def get_divisions(request):
     return JsonResponse([], safe=False)
 
 #----------------------------PUBLIC PAGE----------------------------#
+
+def public(request):
+    return render(request, "index1.html")
 
 def login(request):
     if 'submit' in request.POST:
@@ -87,7 +95,7 @@ def register_station(request):
         fs = FileSystemStorage(location='media/station/')
         fa = fs.save(date, proof)
 
-        l=Login(name=name,email=email,password=password,usertype='pending')
+        l=Login(email=email,password=password,usertype='pending')
         l.save()
 
         f=ForestStation(name=name,head=head,email=email,phone=phone,division=division,password=password,proof=f"media/station/{fa}",staff_count=staff_count,status='pending',login=l)
@@ -95,6 +103,15 @@ def register_station(request):
         return HttpResponse(f"<script>alert('Division added successfully');window.location='/login'</script>")
 
     return render(request,"public/station_register.html",{'countries':countries})
+
+def logout(request):
+    if 'login_id' in request.session:
+        del request.session['login_id']
+    if 'log' in request.session:
+        del request.session['log']
+    if 'foreststation_id' in request.session:
+        del request.session['foreststation_id']
+    return redirect('login')
 
 #----------------------------ADMIN PAGE----------------------------#
 
@@ -228,14 +245,12 @@ def acceptorreject_station(request):
 
 def approvestation(request,id):
     data=ForestStation.objects.get(id=id)
-    data.status='active'
-
     name=data.name
-    email=data.email
-    password=data.password
-    usertype='station'
+    data.status='active'
+    login=data.login
+    l=Login.objects.get(id=login.pk)
+    l.usertype='station'
 
-    l=Login(name=name,email=email,password=password,usertype=usertype)
     l.save()
     data.save()
 
@@ -264,3 +279,8 @@ def stationprofile(request):
     station_id=request.session['foreststation_id']
     data=ForestStation.objects.get(id=station_id)
     return render(request,"forest_station/profile.html",{'data':data})
+
+def updateprofile(request,id):
+    data=ForestStation.objects.get(id=id)
+    return render(request,"forest_station/update.html",{'data':data})
+
