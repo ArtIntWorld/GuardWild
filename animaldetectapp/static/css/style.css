@@ -668,3 +668,86 @@
 
 /****************************Changed**********************************/
 
+/* Slide menu container */
+.slide-menu {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Hidden off-screen initially */
+    width: 250px;
+    height: 100%;
+    background-color: #343a40; /* Match your existing style */
+    overflow-x: hidden;
+    transition: 0.3s ease; /* Smooth transition for sliding */
+    padding-top: 60px;
+    z-index: 1000;
+}
+
+/* Menu links */
+.slide-menu nav a {
+    display: block;
+    color: #f8f9fa; /* Match your page's text color */
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.slide-menu nav a:hover {
+    background-color: #495057; /* Match your existing hover style */
+    color: #fff;
+}
+
+/* Menu toggle button */
+#menu-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+    cursor: pointer;
+    background-color: #007bff; /* Match button styles */
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 18px;
+    border-radius: 5px;
+}
+
+/* Show the menu when active */
+.slide-menu.active {
+    left: 0;
+}
+
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+/*---------------------------------Animal List------------------------------*/
+

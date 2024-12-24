@@ -1,28 +1,31 @@
 {% include "admin/header.html" %}
-<h1>Animal List</h1>
-<table>
-    <tr>
-        <th>Sl No</th>
-        <th>Animal</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Endangered Status</th>
-        <th>Risk Level</th>
-        <th>Photo</th>
-    </tr>
+<h1 class="heading-container">
+    <span class="title">Animal List</span>
+    <a href="addanimal">
+        <input type="button" value="Add New" class="add-new-btn">
+    </a>
+</h1>
+
+<div class="card-container">
     {% for i in data %}
-    <tr>
-        <td>{{forloop.counter}}</td>
-        <td>{{i.name}}</td>
-        <td>{{i.type}}</td>
-        <td>{{i.description}}</td>
-        <td>{{i.endangered_status}}</td>
-        <td>{{i.risk}}</td>
-        <td><img src="{{i.photo}}" alt="{{i.name}}" width="100" height="100"></td>
-        <td><a href="updateanimal/{{i.id}}">Modify</a></td>
-        <td><a href="deleteanimal/{{i.id}}" onclick="return confirm('Are you sure you want to delete {{ i.name }}?');">Remove</a></td>        
-    </tr>
+    <div class="card">
+        <img src="{{i.photo}}" alt="{{i.name}}" class="card-image">
+        <div class="card-content">
+            <h3>{{i.name}}</h3>
+            <p><strong>Type:</strong> {{i.type}}</p>
+            <p class="description"><strong>Description:</strong> {{i.description}}</p>
+            <p><strong>Endangered Status:</strong> {{i.endangered_status}}</p>
+            <p><strong>Risk Level:</strong> {{i.risk}}</p>
+            <div class="card-actions">
+                <a href="updateanimal/{{i.id}}" class="btn modify-btn">Modify</a>
+                <a href="deleteanimal/{{i.id}}" onclick="return confirm('Are you sure you want to delete {{ i.name }}?');" class="btn remove-btn">Remove</a>
+            </div>
+        </div>
+    </div>
     {% endfor %}
-</table>
-<a href="addanimal"><input type="button" value="New Animal" id="addanimal"></a>
+</div>
+
+
+
+
 {% include "admin/footer.html" %}
