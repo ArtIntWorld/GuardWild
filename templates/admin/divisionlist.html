@@ -1,26 +1,56 @@
 {% include "admin/header.html" %}
-<h1>Division List</h1>
-<table>
-    <tr>
-        <th>Sl No</th>
-        <th>Division Name</th>
-        <th>Established Year</th>
-        <th>Description</th>
-        <th>Area Covered</th>
-        <th>District</th>
-    </tr>
-    {% for i in data %}
-    <tr>
-        <td>{{forloop.counter}}</td>
-        <td>{{i.name}}</td>
-        <td>{{i.established_year}}</td>
-        <td>{{i.description}}</td>
-        <td>{{i.area_covered}}</td>
-        <td>{{i.district.name}}</td>
-        <td><a href="updatedivision/{{i.id}}">Modify</a></td>
-        <td><a href="deletedivision/{{i.id}}" onclick="return confirm('Are you sure you want to delete {{ i.name }}?');">Remove</a></td>
-    </tr>
-    {% endfor %}
+<h1 class="heading-container">
+    <span class="title">Division List</span>
+    <a href="adddivision">
+        <input type="button" value="Add New" class="add-new-btn">
+    </a>
+</h1>
+<table class="division-table table table-bordered table-hover text-center align-middle">
+    <thead>
+        <tr>
+            <th>Sl No</th>
+            <th>Division Name</th>
+            <th>Established Year</th>
+            <th>Description</th>
+            <th>Area Covered</th>
+            <th>District</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in data %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.name }}</td>
+            <td>{{ i.established_year }}</td>
+            <td class="text-start">{{ i.description }}</td>
+            <td>{{ i.area_covered }}</td>
+            <td>{{ i.district.name }}</td>
+            <td>
+                <a href="updatedivision/{{ i.id }}" class="btn btn-sm btn-warning">Modify</a>
+                <a href="deletedivision/{{ i.id }}" class="btn btn-sm btn-danger" 
+                   onclick="return confirm('Are you sure you want to delete {{ i.name }}?');">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
-<a href="adddivision"><input type="button" value="New Division" id="adddivision"></a>
-{% include "admin/footer.html" %}
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/lib/wow/wow.min.js"></script>
+<script src="/static/lib/easing/easing.min.js"></script>
+<script src="/static/lib/waypoints/waypoints.min.js"></script>
+<script src="/static/lib/counterup/counterup.min.js"></script>
+<script src="/static/lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="/static/lib/lightbox/js/lightbox.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="/static/js/main.js"></script>
+</body>
+</html>

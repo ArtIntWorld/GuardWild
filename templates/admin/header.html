@@ -31,6 +31,7 @@
     <!-- Template Stylesheet -->
     <link href="/static/css/style.css" rel="stylesheet">
     <link href="/static/css/style1.css" rel="stylesheet">
+    <link href="/static/css/divisionlist.css" rel="stylesheet">
 </head>
 
 <body>
@@ -79,9 +80,16 @@
         <img class="img-fluid me-3" src="/static/img/icon/icon.png" alt="Icon">
         <h1 class="m-2 text-primary">GuardWild</h1>
     </a>
-    <button type="button" class="btn btn-primary ms-auto position-absolute top-0 end-0 m-4" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
-        <i class="bi bi-list"></i> Menu
-    </button>
+    <div class="ms-auto d-flex align-items-center">
+        <!-- Logout Button -->
+        <a href="logout" class="btn btn-danger me-3" title="Logout">
+            <i class="fas fa-sign-out-alt"></i>
+        </a>
+        <!-- Menu Button -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+            <i class="bi bi-list"></i> Menu
+        </button>
+    </div>
 </nav>
 <!-- Navbar End -->
 
