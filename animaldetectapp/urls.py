@@ -52,4 +52,6 @@ urlpatterns = [
     path('station',views.station),
     path('station_profile',views.stationprofile),
     path('stationedit/<id>',views.updateprofile),
+    path('stationanimal',views.stationanimal),
+    path('addstationanimal',views.addstationanimal)
 ]

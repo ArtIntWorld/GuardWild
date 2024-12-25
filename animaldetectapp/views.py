@@ -327,3 +327,11 @@ def updateprofile(request,id):
         'divisions': divisions,
     })
 
+def stationanimal(request):
+    station_id=request.session['foreststation_id']
+    station=ForestStation.objects.get(id=station_id)
+    animals=StationAnimal.objects.filter(station=station)
+    return render(request,"forest_station/station_animal.html",{'animal':animals})
+
+def addstationanimal(request):
+    return render(request,"forest_station/add_stationanimal.html")

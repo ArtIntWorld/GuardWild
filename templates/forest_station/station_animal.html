@@ -1,29 +1,34 @@
 {% include "forest_station/header.html" %}
 <h1 class="heading-container">
     <span class="title">Animal List</span>
-    <a href="addanimal">
+    <a href="addstationanimal">
         <input type="button" value="Add New" class="add-new-btn">
     </a>
 </h1>
-
-<div class="card-container">
-    {% for i in data %}
-    <div class="card">
-        <img src="{{i.photo}}" alt="{{i.name}}" class="card-image">
-        <div class="card-content">
-            <h3>{{i.name}}</h3>
-            <p><strong>Type:</strong> {{i.type}}</p>
-            <p class="description"><strong>Description:</strong> {{i.description}}</p>
-            <p><strong>Endangered Status:</strong> {{i.endangered_status}}</p>
-            <p><strong>Risk Level:</strong> {{i.risk}}</p>
-            <div class="card-actions">
-                <a href="updateanimal/{{i.id}}" class="btn modify-btn">Modify</a>
-                <a href="deleteanimal/{{i.id}}" onclick="return confirm('Are you sure you want to delete {{ i.name }}?');" class="btn remove-btn">Remove</a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
+<table class="forest-station-table table table-bordered table-hover text-center align-middle">
+    <thead>
+        <tr>
+            <th>Sl No</th>
+            <th>Species</th>
+            <th>Population</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            {% for i in animals %}
+            <td>{{forloop.counter}}</td>
+            <td>{{i.animal.name}}</td>
+            <td>{{i.population}}</td>
+            <td>
+                <a href="updatedivision/{{ i.id }}" class="btn btn-sm btn-warning">Modify</a>
+                <a href="deletedivision/{{ i.id }}" class="btn btn-sm btn-danger" 
+                   onclick="return confirm('Are you sure you want to delete {{ i.animal.name }}?');">Remove</a>
+            </td>
+        </tr>
+    </tbody>
+        {% endfor %}
+</table>
 
 <!-- Bootstrap JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
