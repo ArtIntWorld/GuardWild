@@ -282,5 +282,48 @@ def stationprofile(request):
 
 def updateprofile(request,id):
     data=ForestStation.objects.get(id=id)
-    return render(request,"forest_station/update.html",{'data':data})
+
+    countries = Country.objects.all()
+
+    if 'submit' in request.POST:
+        name=request.POST['name']
+        head=request.POST['head']
+        email=request.POST['email']
+        phone=request.POST['phone']
+        
+        if 'proof' in request.FILES:
+            proof=request.FILES['proof']
+            file_extension = proof.name.split('.')[-1].lower()
+            date = name + '.' + file_extension
+            fs=FileSystemStorage(location='media/station/') 
+            fa=fs.save(date, proof)
+            data.photo=f"media/station/{fa}"
+
+        division_id=request.POST['division']
+        division=ForestDivision.objects.get(id=division_id)
+
+        staff_count=request.POST['staff_count']
+
+        data.name=name
+        data.head=head
+        data.email=email
+        data.phone=phone
+        data.staff_count=staff_count
+        data.division=division
+
+        data.save()
+
+        return HttpResponse(f"<script>alert('Station updated successfully');window.location='/station_profile'</script>")
+
+    states = State.objects.filter(country=data.division.district.state.country)
+    districts = District.objects.filter(state=data.division.district.state)
+    divisions = ForestDivision.objects.filter(district=data.division.district)
+
+    return render(request,"forest_station/update.html",{
+        'data': data,
+        'countries': countries,
+        'states': states,
+        'districts': districts,
+        'divisions': divisions,
+    })
 

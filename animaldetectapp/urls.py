@@ -51,4 +51,5 @@ urlpatterns = [
     #--------------------STATION PAGE--------------------#
     path('station',views.station),
     path('station_profile',views.stationprofile),
+    path('stationedit/<id>',views.updateprofile),
 ]
