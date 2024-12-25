@@ -297,3 +297,49 @@ input[type="submit"]:disabled, input[type="reset"]:disabled {
     transition: all 0.3s ease;
 }
 
+/* Profile Section Styles */
+#profile-section {
+    width: 50%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Profile Table Styles */
+#profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#profile-table td {
+    padding: 12px;
+    text-align: left;
+}
+
+#label-station-name, #label-station-head, #label-email, #label-contact, 
+#label-proof, #label-division, #label-staff-count, #label-password {
+    font-weight: bold;
+    color: #555;
+}
+
+/* Button Styles */
+#btn-update {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #3498db;
+    color: white;
+}
+
+#btn-update:hover {
+    background-color: #2980b9;
+}
+
+.reducesize{
+    size: 2px;
+}

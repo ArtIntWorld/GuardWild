@@ -1,42 +1,73 @@
 {% include "forest_station/header.html" %}
 
-<h1>Profile</h1>
-<table>
-    <tr>
-        <td>Station Name</td>
-        <td>{{data.name}}</td>
-    </tr>
-    <tr>
-        <td>Station Head</td>
-        <td>{{data.head}}</td>
-    </tr>
-    <tr>
-        <td>Email</td>
-        <td>{{data.email}}</td>
-    </tr>
-    <tr>
-        <td>Contact</td>
-        <td>{{data.phone}}</td>
-    </tr>
-    <tr>
-        <td>Proof</td>
-        <td><a href="{{data.proof}}" download="{{data.name}}">Download</a></td>
-    </tr>
-    <tr>
-        <td>Division</td>
-        <td>{{data.division.name}},<br>{{data.division.district.name}}</td>
-    </tr>
-    <tr>
-        <td>Staff Count</td>
-        <td>{{data.staff_count}}</td>
-    </tr>
-    <tr>
-        <td>Password</td>
-        <td>{{data.password}}</td>
-    </tr>
-    <tr>
-        <td><a href="stationupdate/{{data.id}}">Update</a></td>
-    </tr>
-</table>
+<div id="profile-section">
+    <h1 class="heading-container">
+        <span class="title">{{data.name}}</span>
+        <a href="stationedit/{{data.id}}">
+            <i class="fas fa-edit reducesize"></i> <!-- Font Awesome Edit Icon -->
+        </a>
+        
+        
+    </h1>
+    <table id="profile-table">
+        <tr>
+            <td id="label-station-head">Station Head:</td>
+            <td>{{data.head}}</td>
+        </tr>
+        <tr>
+            <td id="label-email">Email:</td>
+            <td>{{data.email}}</td>
+        </tr>
+        <tr>
+            <td id="label-contact">Contact:</td>
+            <td>{{data.phone}}</td>
+        </tr>
+        <tr>
+            <td id="label-proof">Proof of Station:</td>
+            <td><a href="{{data.proof}}" download="{{data.name}}">Download</a></td>
+        </tr>
+        <tr>
+            <td id="label-division">Division:</td>
+            <td>{{data.division.name}}, <br> {{data.division.district.name}}</td>
+        </tr>
+        <tr>
+            <td id="label-staff-count">Staff Count:</td>
+            <td>{{data.staff_count}}</td>
+        </tr>
+        <tr>
+            <td id="label-password">Password:</td>
+            <td>{{data.password}}</td> <!-- Optional, handle sensitive data appropriately -->
+        </tr>
+    </table>
+</div>
 
-{% include "forest_station/footer.html" %}
+<div style="text-align: center; margin-top: 20px;">
+    <button onclick="goBack()" id="return-button">
+        Go Back
+    </button>
+</div>
+
+<script>
+    function goBack() {
+        history.back();
+    }
+</script>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/lib/wow/wow.min.js"></script>
+    <script src="/static/lib/easing/easing.min.js"></script>
+    <script src="/static/lib/waypoints/waypoints.min.js"></script>
+    <script src="/static/lib/counterup/counterup.min.js"></script>
+    <script src="/static/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/static/lib/lightbox/js/lightbox.min.js"></script>
+    
+    <!-- Template Javascript -->
+    <script src="/static/js/main.js"></script>
+    </body>
+    </html>
