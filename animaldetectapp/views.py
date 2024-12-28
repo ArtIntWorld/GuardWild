@@ -7,26 +7,26 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import*
 
-import datetime
+import base64
+from datetime import datetime
 from django.core.files.storage import FileSystemStorage
+from django.core.files.base import ContentFile
 
 # Create your views here.
 
 #----------------------------DROPDOWN FNC----------------------------#
 
 def get_states(request):
-    country_id=request.GET.get('country_id')
-    if country_id:
-        states=State.objects.filter(country_id=country_id).values('id', 'name')
-        return JsonResponse(list(states), safe=False)
-    return JsonResponse([], safe=False)
+    # Get the country_id from GET parameters, defaulting to 1 if not provided
+    country_id = request.GET.get('country_id', 1)  # Default to 1 if country_id is not provided
+    states = State.objects.filter(country_id=country_id).values('id', 'name')
+    return JsonResponse(list(states), safe=False)
 
 def get_districts(request):
-    state_id=request.GET.get('state_id')
-    if state_id:
-        districts=District.objects.filter(state_id=state_id).values('id', 'name')
-        return JsonResponse(list(districts), safe=False)
-    return JsonResponse([], safe=False)
+    # Get the state_id from GET parameters, defaulting to 12 if not provided
+    state_id = request.GET.get('state_id', 12)  # Default to 12 if state_id is not provided
+    districts = District.objects.filter(state_id=state_id).values('id', 'name')
+    return JsonResponse(list(districts), safe=False)
 
 def get_divisions(request):
     district_id=request.GET.get('district_id')
@@ -61,7 +61,7 @@ def login(request):
                         request.session['foreststation_id']=res_station.pk
                         print(f"{res_station.name}")
                     return HttpResponse(f"<script>alert('welcome Officer');window.location='station'</script>")
-        else:
+        else:        
             return HttpResponse(f"<script>alert('Invalid username or password');window.location='login'</script>")
     return render(request,'public/login.html')
 
@@ -72,7 +72,7 @@ def signup(request):
     return render(request,"public/sign_up.html")
 
 def register_station(request):
-    countries = Country.objects.all()
+    countries = Country.objects.get(id=1)
     if 'submit' in request.POST:
         name=request.POST['name']
         email=request.POST['email']
@@ -102,7 +102,24 @@ def register_station(request):
         f.save()
         return HttpResponse(f"<script>alert('Division added successfully');window.location='/login'</script>")
 
-    return render(request,"public/station_register.html",{'countries':countries})
+    country_id = 1  # Predefined country_id
+    state_id = 12   # Predefined state_id
+
+    # Fetch the country and state data
+    country = Country.objects.get(id=country_id)  # Fetch the country
+    state = State.objects.get(id=state_id)  # Fetch the state
+
+    # Fetch districts based on the predefined state_id
+    districts = District.objects.filter(state_id=state_id)  # Fetch districts by state_id
+    
+    # Optionally, fetch divisions based on the predefined district_id if needed
+    divisions = ForestDivision.objects.filter(district_id=districts.first().id) if districts else []
+
+    return render(request, "public/station_register.html", {
+        'country': country,
+        'state': state,
+        'districts': districts,
+        'divisions': divisions,})
 
 def logout(request):
     if 'login_id' in request.session:
@@ -335,3 +352,66 @@ def stationanimal(request):
 
 def addstationanimal(request):
     return render(request,"forest_station/add_stationanimal.html")
+
+#----------------------------ANDROID USER PAGE----------------------------#
+
+def and_user_register(request):
+    name=request.POST['name']
+    email=request.POST['email']
+    phone=request.POST['phone']
+    gender=request.POST['gender']
+    city=request.POST['city']
+    password=request.POST['password']
+    dob=request.POST['dob']
+    photo=request.POST['photo']
+    lattitude=request.POST['lattitude']
+    longitude=request.POST['longitude']
+    district_name=request.POST['district']
+    district=District.objects.get(name=district_name)
+
+    profile=base64.b64decode(photo)
+ 
+    timestr = datetime.now().strftime("%Y%m%d%H%M%S") 
+    file_name = f"{name}_{timestr}.jpg"
+
+    fs = FileSystemStorage(location='media/station/')
+    fa = fs.save(file_name, ContentFile(profile))
+
+    l = Login(email=email,password=password,usertype = 'user')
+    l.save()
+
+    f=User(name=name,email=email,phone=phone,longitude=longitude,lattitude=lattitude,district=district,gender=gender,city=city,password=password,dob=dob,photo=f"media/station/{fa}",login=l)
+    f.save()
+
+    return JsonResponse({'status':'ok'})
+
+def and_login(request):
+    email=request.POST['email']
+    password=request.POST['password']
+    if Login.objects.filter(email=email,password=password,usertype='user').exists():
+        qa=Login.objects.get(email=email,password=password,usertype='user')
+        lid=qa.pk
+        if qa.usertype=='user':
+            try:
+                qd=User.objects.get(login_id=lid)
+                uid=qd.pk
+                return JsonResponse({'status':'ok','lid':lid,'uid':uid,'user_type':'user'})
+            except User.DoesNotExist:
+                print('Login Failed.')
+                return JsonResponse({'status':'no'})
+        else:
+            print('Login Failed.')
+            return JsonResponse({'status':'no'})
+    else:
+        print('Login Failed.')
+        return JsonResponse({'status':'no'})
+    
+def and_user_complaint(request):
+    user_id=request.POST['uid']
+    complaint=request.POST['complaint']
+    date=datetime.now().strftime("%d-%m-%Y")
+    status=request.POST['status']
+    user=User.objects.get(id=user_id)
+    data=Complaint(user=user,complaint=complaint,status=status,date=date)
+    data.save()
+    return JsonResponse({'status':'ok'})

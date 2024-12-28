@@ -62,28 +62,7 @@
             <td class="division-add-label">Area Covered</td>
             <td><input type="text" name="area_covered" id="area_covered" value="{{ data.area_covered }}" required class="division-add-input"></td>
         </tr>
-        <tr>
-            <td class="division-add-label">Country</td>
-            <td>
-                <select id="country" name="country" required class="division-add-select">
-                    <option value="">Select Country</option>
-                    {% for country in countries %}
-                        <option value="{{ country.id }}" {% if country.id == data.district.state.country.id %}selected{% endif %}>{{ country.name }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td class="division-add-label">State</td>
-            <td>
-                <select id="state" name="state" required class="division-add-select">
-                    <option value="">Select State</option>
-                    {% for state in states %}
-                        <option value="{{ state.id }}" {% if state.id == data.district.state.id %}selected{% endif %}>{{ state.name }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-        </tr>
+        
         <tr>
             <td class="division-add-label">District</td>
             <td>

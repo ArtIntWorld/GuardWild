@@ -131,30 +131,15 @@
                     </div>
     
                     <!-- Country, State, District, Division -->
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="country" class="form-label">Country</label>
-                            <select id="country" name="country" class="form-control" required>
-                                <option value="">Select Country</option>
-                                {% for country in countries %}
-                                    <option value="{{ country.id }}">{{ country.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="state" class="form-label">State</label>
-                            <select id="state" name="state" class="form-control" required>
-                                <option value="">Select State</option>
-                            </select>
-                        </div>
-                    </div>
+                    
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="district" class="form-label">District</label>
                             <select id="district" name="district" class="form-control" required>
                                 <option value="">Select District</option>
+                                {% for district in districts %}
+                                    <option value="{{ district.id }}">{{ district.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -163,6 +148,9 @@
                             <label for="division" class="form-label">Division</label>
                             <select id="division" name="division" class="form-control" required>
                                 <option value="">Select Division</option>
+                                {% for division in divisions %}
+                                    <option value="{{ division.id }}">{{ division.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                     </div>
@@ -200,14 +188,27 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Automatically set the country_id = 1 and state_id = 12
+        var countryId = 1;
+        var stateId = 12;
         
+        // Trigger country change to load states and districts
+        $('#country').val(countryId).change();  // This will automatically trigger the change event for country
+        
+        // Trigger state change to load districts and divisions
+        $('#state').val(stateId).change();  // This will automatically trigger the change event for state
+    
+        // When the country is changed, load the states
         $('#country').change(function () {
             var countryId = $(this).val();
+            
+            // Reset the dependent fields
             $('#state').empty().append('<option value="">Select State</option>');
             $('#district').empty().append('<option value="">Select District</option>');
             $('#division').empty().append('<option value="">Select Division</option>');
-
+    
             if (countryId) {
+                // AJAX call to get states based on countryId
                 $.ajax({
                     url: '{% url "get_states" %}',
                     data: { country_id: countryId },
@@ -215,18 +216,23 @@
                         data.forEach(function (state) {
                             $('#state').append('<option value="' + state.id + '">' + state.name + '</option>');
                         });
+                        // Trigger the state change event after states are loaded
+                        $('#state').val(stateId).change();
                     }
                 });
             }
         });
-
-        
+    
+        // When the state is changed, load the districts
         $('#state').change(function () {
             var stateId = $(this).val();
+            
+            // Reset the dependent fields
             $('#district').empty().append('<option value="">Select District</option>');
             $('#division').empty().append('<option value="">Select Division</option>');
-
+    
             if (stateId) {
+                // AJAX call to get districts based on stateId
                 $.ajax({
                     url: '{% url "get_districts" %}',
                     data: { state_id: stateId },
@@ -234,16 +240,22 @@
                         data.forEach(function (district) {
                             $('#district').append('<option value="' + district.id + '">' + district.name + '</option>');
                         });
+                        // Trigger the district change event after districts are loaded
+                        $('#district').val('').change(); // Adjust as needed to pre-select a district
                     }
                 });
             }
         });
-
+    
+        // When the district is changed, load the divisions
         $('#district').change(function () {
             var districtId = $(this).val();
+            
+            // Reset the division field
             $('#division').empty().append('<option value="">Select Division</option>');
-
+    
             if (districtId) {
+                // AJAX call to get divisions based on districtId
                 $.ajax({
                     url: '{% url "get_divisions" %}',
                     data: { district_id: districtId },
@@ -256,6 +268,7 @@
             }
         });
     });
+    
 </script>
 
 <script>

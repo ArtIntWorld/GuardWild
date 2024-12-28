@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7ufzb+=f(buc#f!io&o68j7ymk-o@nf8s3dfa+33ej-1^4*%4@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'animaldetectapp'
+    'animaldetectapp',
+    'sslserver'
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

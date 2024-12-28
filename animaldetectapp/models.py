@@ -18,12 +18,14 @@ class District(models.Model):
     state=models.ForeignKey(State,on_delete=models.CASCADE)
 
 class User(models.Model):
+    login=models.ForeignKey(Login,on_delete=models.CASCADE)
+    photo=models.CharField(max_length=100)
+    gender=models.CharField(max_length=100)
+    dob=models.CharField(max_length=100)
     name=models.CharField(max_length=100)
     email=models.CharField(max_length=100)
     phone=models.CharField(max_length=100)
     password=models.CharField(max_length=100)
-    country=models.ForeignKey(Country,on_delete=models.CASCADE)
-    state=models.ForeignKey(State,on_delete=models.CASCADE)
     district=models.ForeignKey(District,on_delete=models.CASCADE)
     city=models.CharField(max_length=100)
     lattitude=models.CharField(max_length=100)
@@ -65,4 +67,11 @@ class StationAnimal(models.Model):
     animal=models.ForeignKey(Animals,on_delete=models.CASCADE)
     population=models.CharField(max_length=100)
 
+class Complaint(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    complaint=models.CharField(max_length=700)
+    reply=models.CharField(max_length=700)
+    date=models.CharField(max_length=100)
+    status=models.CharField(max_length=100)
+    
     
