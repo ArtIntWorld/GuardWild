@@ -17,28 +17,6 @@ class District(models.Model):
     name=models.CharField(max_length=100)
     state=models.ForeignKey(State,on_delete=models.CASCADE)
 
-class User(models.Model):
-    login=models.ForeignKey(Login,on_delete=models.CASCADE)
-    photo=models.CharField(max_length=100)
-    gender=models.CharField(max_length=100)
-    dob=models.CharField(max_length=100)
-    name=models.CharField(max_length=100)
-    email=models.CharField(max_length=100)
-    phone=models.CharField(max_length=100)
-    password=models.CharField(max_length=100)
-    district=models.ForeignKey(District,on_delete=models.CASCADE)
-    city=models.CharField(max_length=100)
-    lattitude=models.CharField(max_length=100)
-    longitude=models.CharField(max_length=100)
-
-class Animals(models.Model):
-    name=models.CharField(max_length=100)
-    type=models.CharField(max_length=100)
-    photo=models.CharField(max_length=200)
-    description=models.CharField(max_length=500)
-    endangered_status=models.CharField(max_length=100)
-    risk=models.CharField(max_length=100)
-
 class ForestDivision(models.Model):
     name=models.CharField(max_length=100)
     established_year=models.CharField(max_length=100)
@@ -61,6 +39,29 @@ class ForestStation(models.Model):
     password=models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+class User(models.Model):
+    login=models.ForeignKey(Login,on_delete=models.CASCADE)
+    photo=models.CharField(max_length=100)
+    gender=models.CharField(max_length=100)
+    dob=models.CharField(max_length=100)
+    name=models.CharField(max_length=100)
+    email=models.CharField(max_length=100)
+    phone=models.CharField(max_length=100)
+    password=models.CharField(max_length=100)
+    station=models.ForeignKey(ForestStation,on_delete=models.CASCADE)
+    city=models.CharField(max_length=100)
+    lattitude=models.CharField(max_length=100)
+    longitude=models.CharField(max_length=100)
+
+class Animals(models.Model):
+    name=models.CharField(max_length=100)
+    type=models.CharField(max_length=100)
+    photo=models.CharField(max_length=200)
+    description=models.CharField(max_length=500)
+    endangered_status=models.CharField(max_length=100)
+    risk=models.CharField(max_length=100)
+
 
 class Station_Animal(models.Model):
     station=models.ForeignKey(ForestStation,on_delete=models.CASCADE)

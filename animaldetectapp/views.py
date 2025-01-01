@@ -378,6 +378,45 @@ def deletestationanimal(request,id):
 
 #----------------------------ANDROID USER PAGE----------------------------#
 
+def and_get_countries(request):
+    countries=Country.objects.all()
+    data=[]
+    for i in countries:
+        data.append({'country_id':i.pk,'country_name':i.name})
+    return JsonResponse({'status':'ok','data':data})
+
+def and_get_states(request):
+    country_id=request.POST['country_id']
+    states=State.objects.filter(country_id=country_id)
+    data=[]
+    for i in states:
+        data.append({'state_id':i.pk,'state_name':i.name})
+    return JsonResponse({'status':'ok','data':data})
+
+def and_get_districts(request):
+    districts=District.objects.all()
+    data=[]
+    for i in districts:
+        data.append({'district_id':i.pk,'district_name':i.name})
+    return JsonResponse({'status':'ok','data':data})
+
+def and_get_divisions(request):
+    district_id=request.POST['district_id']
+    divisions=ForestDivision.objects.filter(district_id=district_id)
+    data=[]
+    for i in divisions:
+        data.append({'division_id':i.pk,'division_name':i.name})
+    return JsonResponse({'status':'ok','data':data})
+
+def and_get_stations(request):
+    division_id=request.POST['division_id']
+    stations=ForestStation.objects.filter(division_id=division_id)
+    data=[]
+    for i in stations:
+        data.append({'station_id':i.pk,'station_name':i.name})
+    return JsonResponse({'status':'ok','data':data})
+
+
 def and_user_register(request):
     name=request.POST['name']
     email=request.POST['email']
@@ -387,10 +426,8 @@ def and_user_register(request):
     password=request.POST['password']
     dob=request.POST['dob']
     photo=request.POST['photo']
-    lattitude=request.POST['lattitude']
-    longitude=request.POST['longitude']
-    district_name=request.POST['district']
-    district=District.objects.get(name=district_name)
+    station_name=request.POST['station']
+    station=ForestStation.objects.get(name=station_name)
 
     profile=base64.b64decode(photo)
  
@@ -403,7 +440,7 @@ def and_user_register(request):
     l = Login(email=email,password=password,usertype = 'user')
     l.save()
 
-    f=User(name=name,email=email,phone=phone,longitude=longitude,lattitude=lattitude,district=district,gender=gender,city=city,password=password,dob=dob,photo=f"media/station/{fa}",login=l)
+    f=User(name=name,email=email,phone=phone,station=station,gender=gender,city=city,password=password,dob=dob,photo=f"media/station/{fa}",login=l)
     f.save()
 
     return JsonResponse({'status':'ok'})
@@ -450,8 +487,9 @@ def and_user_view_complaint(request):
 def and_user_profile(request):
     user_id=request.POST['uid']
     user=User.objects.get(id=user_id)
+    district=user.station.division.district
     data=[]
-    data.append({'name':user.name,'email':user.email,'phone':user.phone,'dob':user.dob,'password':user.password,'district':user.district.name,'city':user.city,'gender':user.gender,'photo':user.photo})
+    data.append({'name':user.name,'email':user.email,'phone':user.phone,'dob':user.dob,'password':user.password,'district':district.name,'city':user.city,'gender':user.gender,'photo':user.photo})
     return JsonResponse({'status':'ok','data':data})
 
 from django.http import JsonResponse
@@ -459,10 +497,10 @@ from django.http import JsonResponse
 def and_user_animal_list(request):
     user_id = request.POST['uid']
     user = User.objects.get(id=user_id)
-    district_id = user.district.pk
+    division_id = user.station.division.pk
 
     # Retrieve animals in the district
-    animals = Animals.objects.filter(station_animal__station__division__district__id=district_id)
+    animals = Animals.objects.filter(station_animal__station__division__id=division_id)
         
     data = []
     for animal in animals:  # Assuming there's a ForeignKey to Animals in Station_Animal
@@ -481,8 +519,8 @@ def and_user_animal_list(request):
 def and_user_view_station(request):
     user_id = request.POST['uid']
     user = User.objects.get(id=user_id)
-    district_id = user.district.pk
-    stations = ForestStation.objects.filter(division__district__id=district_id)
+    division_id = user.station.division.pk
+    stations = ForestStation.objects.filter(division_id=division_id)
     data=[]
     for i in stations:
         data.append({'name':i.name,'email':i.email,'phone':i.phone,})

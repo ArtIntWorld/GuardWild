@@ -64,4 +64,7 @@ urlpatterns = [
     path('and_user_profile',views.and_user_profile),
     path('and_user_animal_list',views.and_user_animal_list),
     path('and_user_view_station',views.and_user_view_station),
+    path('and_get_districts',views.and_get_districts),
+    path('and_get_divisions',views.and_get_divisions),
+    path('and_get_stations',views.and_get_stations),
 ]
