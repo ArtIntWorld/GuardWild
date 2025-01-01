@@ -54,9 +54,14 @@ urlpatterns = [
     path('stationedit/<id>',views.updateprofile),
     path('stationanimal',views.stationanimal),
     path('addstationanimal',views.addstationanimal),
+    path('deletestationanimal/<id>',views.deletestationanimal),
 
     #--------------------ANDROID USER PAGE--------------------#
     path('and_user_register',views.and_user_register),
     path('and_login',views.and_login),
     path('and_user_complaint',views.and_user_complaint),
+    path('and_user_view_complaint',views.and_user_view_complaint),
+    path('and_user_profile',views.and_user_profile),
+    path('and_user_animal_list',views.and_user_animal_list),
+    path('and_user_view_station',views.and_user_view_station),
 ]

@@ -347,11 +347,34 @@ def updateprofile(request,id):
 def stationanimal(request):
     station_id=request.session['foreststation_id']
     station=ForestStation.objects.get(id=station_id)
-    animals=StationAnimal.objects.filter(station=station)
-    return render(request,"forest_station/station_animal.html",{'animal':animals})
+    animals=Station_Animal.objects.filter(station=station)
+    return render(request,"forest_station/station_animal.html",{'animals':animals})
 
 def addstationanimal(request):
-    return render(request,"forest_station/add_stationanimal.html")
+    animals=Animals.objects.all()
+    if 'submit' in request.POST:
+        station_id=request.session['foreststation_id']
+        station=ForestStation.objects.get(id=station_id)
+
+        animal_names = request.POST.getlist('animal_name[]')
+        population_counts = request.POST.getlist('population_count[]')
+
+        animal_data = list(zip(animal_names, population_counts))
+
+        for animal_id, population in animal_data:
+            animal = Animals.objects.get(id=animal_id)
+            
+            sa=Station_Animal(station=station,animal=animal,population=population)
+            sa.save()
+        return HttpResponse(f"<script>alert('Animals of {station.name} added successfully');window.location='/stationanimal'</script>")
+    return render(request,"forest_station/add_stationanimal.html",{'animals':animals})
+
+def deletestationanimal(request,id):
+    data=Station_Animal.objects.get(id=id)
+    name=data.animal.name
+    data.delete()
+    return HttpResponse(f"<script>alert('{name} deleted successfully');window.location='/stationanimal'</script>")
+
 
 #----------------------------ANDROID USER PAGE----------------------------#
 
@@ -412,6 +435,55 @@ def and_user_complaint(request):
     date=datetime.now().strftime("%d-%m-%Y")
     status=request.POST['status']
     user=User.objects.get(id=user_id)
-    data=Complaint(user=user,complaint=complaint,status=status,date=date)
+    data=Complaint(user=user,complaint=complaint,status=status,date=date,reply='pending')
     data.save()
     return JsonResponse({'status':'ok'})
+
+def and_user_view_complaint(request):
+    user_id=request.POST['uid']
+    complaints=Complaint.objects.filter(user_id=user_id)
+    data=[]
+    for i in complaints:
+        data.append({'complaint':i.complaint,'reply':i.reply})
+    return JsonResponse({'status':'ok','data':data})
+
+def and_user_profile(request):
+    user_id=request.POST['uid']
+    user=User.objects.get(id=user_id)
+    data=[]
+    data.append({'name':user.name,'email':user.email,'phone':user.phone,'dob':user.dob,'password':user.password,'district':user.district.name,'city':user.city,'gender':user.gender,'photo':user.photo})
+    return JsonResponse({'status':'ok','data':data})
+
+from django.http import JsonResponse
+
+def and_user_animal_list(request):
+    user_id = request.POST['uid']
+    user = User.objects.get(id=user_id)
+    district_id = user.district.pk
+
+    # Retrieve animals in the district
+    animals = Animals.objects.filter(station_animal__station__division__district__id=district_id)
+        
+    data = []
+    for animal in animals:  # Assuming there's a ForeignKey to Animals in Station_Animal
+        data.append({
+            'name': animal.name,
+            'type': animal.type,
+            'description': animal.description,
+            'endangered': animal.endangered_status,
+            'risk': animal.risk,
+            'photo': animal.photo,
+        })
+    
+    # Return the response after the loop
+    return JsonResponse({'status': 'ok', 'data': data})
+
+def and_user_view_station(request):
+    user_id = request.POST['uid']
+    user = User.objects.get(id=user_id)
+    district_id = user.district.pk
+    stations = ForestStation.objects.filter(division__district__id=district_id)
+    data=[]
+    for i in stations:
+        data.append({'name':i.name,'email':i.email,'phone':i.phone,})
+    return JsonResponse({'status': 'ok', 'data': data})

@@ -62,7 +62,7 @@ class ForestStation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-class StationAnimal(models.Model):
+class Station_Animal(models.Model):
     station=models.ForeignKey(ForestStation,on_delete=models.CASCADE)
     animal=models.ForeignKey(Animals,on_delete=models.CASCADE)
     population=models.CharField(max_length=100)

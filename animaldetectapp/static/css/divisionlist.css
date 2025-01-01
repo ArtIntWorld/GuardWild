@@ -343,3 +343,111 @@ input[type="submit"]:disabled, input[type="reset"]:disabled {
 .reducesize{
     size: 2px;
 }
+
+.add-animal-form-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.add-animal-label {
+    font-weight: bold;
+    color: #555;
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+    width: 40%;
+}
+
+.add-animal-table td {
+    padding: 10px;
+    margin-right: 20px;
+}
+
+/* Input Fields */
+.add-animal-input, 
+.add-animal-select, 
+.add-animal-textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.add-animal-input:focus, 
+.add-animal-select:focus, 
+.add-animal-textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Select Dropdown Styling */
+.add-animal-select {
+    height: 36px;
+    background-color: #fff;
+}
+
+/* Textarea Styling */
+.add-animal-textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Action Buttons */
+.add-animal-actions {
+    text-align: center;
+    padding-top: 10px;
+}
+
+.add-animal-btn-submit, 
+.add-animal-btn-reset {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+}
+
+.add-animal-btn-submit {
+    background-color: #28a745;
+}
+
+.add-animal-btn-submit:hover {
+    background-color: #218838;
+}
+
+.add-animal-btn-reset {
+    background-color: #dc3545;
+}
+
+.add-animal-btn-reset:hover {
+    background-color: #c82333;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .add-animal-label {
+        font-size: 14px;
+    }
+
+    .add-animal-input, 
+    .add-animal-select, 
+    .add-animal-textarea {
+        font-size: 14px;
+    }
+
+    .add-animal-btn-submit, 
+    .add-animal-btn-reset {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
