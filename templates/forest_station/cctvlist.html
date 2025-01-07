@@ -1,7 +1,7 @@
 {% include "forest_station/header.html" %}
 <h1 class="heading-container">
-    <span class="title">Animal List</span>
-    <a href="addstationanimal">
+    <span class="title">Camera List</span>
+    <a href="addcamera">
         <input type="button" value="Add New" class="add-new-btn">
     </a>
 </h1>
@@ -9,19 +9,33 @@
     <thead>
         <tr>
             <th>Sl No</th>
-            <th>Species</th>
-            <th>Number of</th>
+            <th>Camera</th>
+            <th>Lattitude</th>
+            <th>Longitude</th>
+            <th>Status</th>
             <th>Action</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            {% for i in animals %}
+            {% for i in cctv %}
             <td>{{forloop.counter}}</td>
-            <td>{{i.animal.name}}</td>
-            <td>{{i.population}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.lattitude}}</td>
+            <td>{{i.longitude}}</td>
             <td>
-                <a href="deletestationanimal/{{ i.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete {{ i.animal.name }}?');">Remove</a>
+                <form method="post" action="{% url 'toggle_status' i.id %}">
+                    {% if i.status == 'active' %}
+                    Activated<br>
+                        <button type="submit" class="btn btn-danger">Set Inactive</button>
+                    {% else %}
+                    Inactivated<br>
+                        <button type="submit" class="btn btn-success">Set Active</button>
+                    {% endif %}
+                </form>
+            </td>
+            <td>
+                <a href="deletecamera/{{ i.id }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete {{ i.name }}?');">Remove</a>
             </td>
         </tr>
     </tbody>

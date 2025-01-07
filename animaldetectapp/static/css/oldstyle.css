@@ -1,91 +1,4 @@
-
-
-    .form-group label {
-        font-weight: bold;
-        font-size: 1rem;
-        color: #333;
-    }
-
-    .form-control {
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        font-size: 1rem;
-    }
-
-    .btn {
-        border-radius: 5px;
-        padding: 10px 20px;
-    }
-
-    .btn-primary {
-        background-color: #007bff;
-        border: none;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-    .btn-secondary {
-        background-color: #6c757d;
-        border: none;
-        color: white;
-    }
-
-    .btn-secondary:hover {
-        background-color: #5a6268;
-    }
-
-    .image-container {
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .image-container img {
-        object-fit: cover;
-        width: 100%;
-        height: auto;
-    }
-
-    .image-new {
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        height: 100%;  /* Ensures the container takes full height of the column */
-    }
-    
-    .image-new img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;  /* Ensures the image fills the container, cropping where needed */
-        object-position: top center;  /* Keeps the top part of the image visible */
-        max-height: 500px;  /* Limit the height of the image */
-    }
-    
-
-    .container-xxl {
-        padding: 80px 0;
-    }
-
-    .text-center {
-        text-align: center;
-    }
-
-    .wow {
-        visibility: hidden;
-    }
-
-    /* Ensure form and image are aligned in mobile views */
-    @media (max-width: 768px) {
-        .col-lg-6 {
-            margin-bottom: 30px;
-        }
-    }
-
-/***********************************/
+/********** Template CSS **********/
 :root {
     --primary: #2EB872;
     --light: #F3F4F5;
@@ -117,6 +30,15 @@
 
 
 /*** Button ***/
+.btn {
+    font-weight: 500;
+    transition: .5s;
+}
+
+.btn.btn-primary,
+.btn.btn-secondary {
+    color: #FFFFFF;
+}
 
 .btn-square {
     width: 38px;
@@ -656,89 +578,3 @@
 .footer .copyright a:hover {
     color: var(--primary);
 }
-
-/****************************Changed**********************************/
-
-/* Slide menu container */
-.slide-menu {
-    position: fixed;
-    top: 0;
-    left: -250px; /* Hidden off-screen initially */
-    width: 250px;
-    height: 100%;
-    background-color: #343a40; /* Match your existing style */
-    overflow-x: hidden;
-    transition: 0.3s ease; /* Smooth transition for sliding */
-    padding-top: 60px;
-    z-index: 1000;
-}
-
-/* Menu links */
-.slide-menu nav a {
-    display: block;
-    color: #f8f9fa; /* Match your page's text color */
-    padding: 10px 20px;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.slide-menu nav a:hover {
-    background-color: #495057; /* Match your existing hover style */
-    color: #fff;
-}
-
-/* Menu toggle button */
-#menu-toggle {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 1100;
-    cursor: pointer;
-    background-color: #007bff; /* Match button styles */
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    font-size: 18px;
-    border-radius: 5px;
-}
-
-/* Show the menu when active */
-.slide-menu.active {
-    left: 0;
-}
-
-/* Basic reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-/* Basic reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-/*---------------------------------Animal List------------------------------*/
-

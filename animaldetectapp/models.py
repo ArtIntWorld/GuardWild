@@ -75,4 +75,21 @@ class Complaint(models.Model):
     date=models.CharField(max_length=100)
     status=models.CharField(max_length=100)
     
-    
+class Subscribe(models.Model):
+    email=models.CharField(max_length=100)
+
+class Camera(models.Model):
+    name=models.CharField(max_length=100)
+    station=models.ForeignKey(ForestStation,on_delete=models.CASCADE)
+    lattitude=models.CharField(max_length=100)
+    longitude=models.CharField(max_length=100)
+    status=models.CharField(max_length=100)
+    ip=models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Alerts(models.Model):
+    camera=models.ForeignKey(Camera,on_delete=models.CASCADE)
+    animal=models.ForeignKey(Animals,on_delete=models.CASCADE)
+    date=models.CharField(max_length=100)
+    time=models.CharField(max_length=100)
+    photo=models.CharField(max_length=200)

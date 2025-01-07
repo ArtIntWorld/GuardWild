@@ -26,7 +26,7 @@ urlpatterns = [
     path('get_divisions/', views.get_divisions, name='get_divisions'),
 
     #--------------------COMMON PAGE--------------------#
-    path('public', views.public),
+    path('subscribe/', views.subscribe, name='subscribe'),
     path('',views.index),
     path('signup',views.signup),
     path('logout/',views.logout, name='logout'),
@@ -55,6 +55,10 @@ urlpatterns = [
     path('stationanimal',views.stationanimal),
     path('addstationanimal',views.addstationanimal),
     path('deletestationanimal/<id>',views.deletestationanimal),
+    path('cctvlist',views.cctvlist,name='cctvlist'),
+    path('addcamera',views.addcamera),
+    path('deletecamera/<id>',views.deletecamera),
+    path('toggle-status/<camera_id>/', views.toggle_status, name='toggle_status'),
 
     #--------------------ANDROID USER PAGE--------------------#
     path('and_user_register',views.and_user_register),
@@ -67,4 +71,5 @@ urlpatterns = [
     path('and_get_districts',views.and_get_districts),
     path('and_get_divisions',views.and_get_divisions),
     path('and_get_stations',views.and_get_stations),
+    path('and_get_profile',views.and_get_profile),
 ]

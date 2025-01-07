@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
@@ -37,8 +37,16 @@ def get_divisions(request):
 
 #----------------------------PUBLIC PAGE----------------------------#
 
-def public(request):
-    return render(request, "index1.html")
+def subscribe(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        if Subscribe.objects.filter(email=email).exists():
+            return HttpResponse(f"<script>alert('{email} already exists');window.location='/';</script>")
+        s = Subscribe(email=email)
+        s.save()
+        return HttpResponse(f"<script>alert('Subscribed successfully');window.location='/';</script>")
+    return redirect('/')
+
 
 def login(request):
     if 'submit' in request.POST:
@@ -100,7 +108,7 @@ def register_station(request):
 
         f=ForestStation(name=name,head=head,email=email,phone=phone,division=division,password=password,proof=f"media/station/{fa}",staff_count=staff_count,status='pending',login=l)
         f.save()
-        return HttpResponse(f"<script>alert('Division added successfully');window.location='/login'</script>")
+        return HttpResponse(f"<script>alert('Station registered successfully');window.location='/login'</script>")
 
     country_id = 1  # Predefined country_id
     state_id = 12   # Predefined state_id
@@ -299,6 +307,8 @@ def stationprofile(request):
 
 def updateprofile(request,id):
     data=ForestStation.objects.get(id=id)
+    login_id=data.login.pk
+    station_login=Login.objects.get(id=login_id)
 
     countries = Country.objects.all()
 
@@ -375,6 +385,52 @@ def deletestationanimal(request,id):
     data.delete()
     return HttpResponse(f"<script>alert('{name} deleted successfully');window.location='/stationanimal'</script>")
 
+def cctvlist(request):
+    station_id=request.session['foreststation_id']
+    station=ForestStation.objects.get(id=station_id)
+    cctv=Camera.objects.filter(station=station)
+    return render(request,"forest_station/cctvlist.html",{'cctv':cctv})
+
+def addcamera(request):
+    if 'submit' in request.POST:
+        station_id=request.session['foreststation_id']
+        station=ForestStation.objects.get(id=station_id)
+        
+        camera_names=request.POST.getlist('camera_name[]')
+        ip_address=request.POST.getlist('ip_address[]')
+        lattitudes=request.POST.getlist('lattitude[]')
+        longitudes=request.POST.getlist('longitude[]')
+
+        camera_data = list(zip(camera_names, ip_address, lattitudes, longitudes))
+        print(f"Camera Data: {camera_data}")
+
+        for name, ip, lat, lon in camera_data:
+            try:
+                c = Camera(name=name, station=station, ip=ip, lattitude=lat, longitude=lon, status='inactive')
+                c.save()
+            except Exception as e:
+                print(f"Error while saving camera: {e}")
+        
+        return HttpResponse(f"<script>alert('Camera added successfully');window.location='cctvlist'</script>")
+    return render(request,"forest_station/addcamera.html")
+
+def toggle_status(request, camera_id):
+    if request.method == 'POST':
+        # Fetch the camera by ID or return a 404 if not found
+        camera = get_object_or_404(Camera, id=camera_id)
+
+        # Toggle the status
+        camera.status = 'inactive' if camera.status == 'active' else 'active'
+        camera.save()
+
+        # Redirect back to the CCTV list page
+        return redirect('cctvlist')
+    
+def deletecamera(request,id):
+    data=Camera.objects.get(id=id)
+    name=data.name
+    data.delete()
+    return HttpResponse(f"<script>alert('{name} deleted successfully');window.location='cctv'</script>")
 
 #----------------------------ANDROID USER PAGE----------------------------#
 
@@ -525,3 +581,11 @@ def and_user_view_station(request):
     for i in stations:
         data.append({'name':i.name,'email':i.email,'phone':i.phone,})
     return JsonResponse({'status': 'ok', 'data': data})
+
+def and_get_profile(request):
+    user_id = request.POST['uid']
+    user = User.objects.get(id=user_id)
+    data=[]
+    data.append({'name': user.name,'password': user.password,'email': user.email,'phone': user.phone,'gender': user.gender,'photo': user.photo,'dob': user.dob,'city': user.city,'district': user.station.division.district.name,'station': user.station.name,'division': user.station.division.name})
+    return JsonResponse({'status': 'ok', 'data': data})
+

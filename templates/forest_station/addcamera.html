@@ -44,22 +44,19 @@
     
 <br><br><br>
 <form method="post" class="animal-add-form">
-    <h1 class="animal-add-form-title">Add Animal Data</h1>
+    <h1 class="animal-add-form-title">Add Camera</h1>
     <table class="division-add-table">
         <tr>
-            <td class="division-add-label">Animal</td>
-            <td class="station_animal_add-label">Number of</td>
+            <td class="division-add-label">Camera</td>
+            <td class="station_animal_add-label">IP</td>
+            <td class="station_animal_add-label">Latitude</td>
+            <td class="station_animal_add-label">Longitude</td>
         </tr>
         <tr>
-            <td>
-                <select id="animal_name" name="animal_name[]" required class="division-add-select">
-                    <option value="">Select Animal</option>
-                    {% for animal in animals %}
-                        <option value="{{ animal.id }}" {% if animal.id == data.animal.id %}selected{% endif %}>{{ animal.name }}</option>
-                    {% endfor %}
-                </select>
-            </td>
-            <td><input type="number" name="population_count[]" required class="division-add-input" min="0" placeholder="Enter Population Count"></td>
+            <td><input type="text" name="camera_name[]" required class="division-add-input" min="0" placeholder="Enter Camera Name"></td>
+            <td><input type="text" name="ip_address[]" required class="division-add-input" min="0" placeholder="Enter IP"></td>
+            <td><input type="text" name="lattitude[]" required class="division-add-input" min="0" placeholder="Enter Latitude"></td>
+            <td><input type="text" name="longitude[]" required class="division-add-input" min="0" placeholder="Enter Longitude"></td>
             <td><button type="button" class="division-add-btn-reset">Remove</button></td>
         </tr>
     </table>
@@ -78,24 +75,37 @@ document.getElementById('add-more-btn').addEventListener('click', function() {
     // Create a new row
     const newRow = document.createElement('tr');
     
-    // Create animal name dropdown
-    const animalNameCell = document.createElement('td');
-    const animalNameSelect = document.createElement('select');
-    animalNameSelect.name = "animal_name[]";
-    animalNameSelect.classList.add('division-add-select');
-    animalNameSelect.required = true;
-    animalNameSelect.innerHTML = `<option value="">Select Animal</option>{% for animal in animals %}<option value="{{ animal.id }}">{{ animal.name }}</option>{% endfor %}`;
-    animalNameCell.appendChild(animalNameSelect);
-    
-    // Create population count input field
-    const populationCountCell = document.createElement('td');
-    const populationInput = document.createElement('input');
-    populationInput.type = 'number';
-    populationInput.name = 'population_count[]';
-    populationInput.classList.add('division-add-input');
-    populationInput.min = 0;
-    populationInput.placeholder = 'Enter Population Count';
-    populationCountCell.appendChild(populationInput);
+    const cameraNameCell = document.createElement('td');
+    const cameraInput = document.createElement('input');
+    cameraInput.type = 'text';
+    cameraInput.name = 'camera_name[]';
+    cameraInput.classList.add('division-add-input');
+    cameraInput.placeholder = 'Enter Camera Name';
+    cameraNameCell.appendChild(cameraInput);
+
+    const ipCell = document.createElement('td');
+    const ipInput = document.createElement('input');
+    ipInput.type = 'text';
+    ipInput.name = 'ip_address[]';
+    ipInput.classList.add('division-add-input');
+    ipInput.placeholder = 'Enter IP';
+    ipCell.appendChild(ipInput);
+
+    const latitudeCell = document.createElement('td');
+    const latitudeInput = document.createElement('input');
+    latitudeInput.type = 'text';
+    latitudeInput.name = 'lattitude[]';
+    latitudeInput.classList.add('division-add-input');
+    latitudeInput.placeholder = 'Enter Latitude';
+    latitudeCell.appendChild(latitudeInput);
+
+    const longitudeCell = document.createElement('td');
+    const longitudeInput = document.createElement('input');
+    longitudeInput.type = 'text';
+    longitudeInput.name = 'longitude[]';
+    longitudeInput.classList.add('division-add-input');
+    longitudeInput.placeholder = 'Enter Longitude';
+    longitudeCell.appendChild(longitudeInput);
     
     // Create remove button
     const removeCell = document.createElement('td');
@@ -109,8 +119,10 @@ document.getElementById('add-more-btn').addEventListener('click', function() {
     removeCell.appendChild(removeBtn);
     
     // Append new cells to the new row
-    newRow.appendChild(animalNameCell);
-    newRow.appendChild(populationCountCell);
+    newRow.appendChild(cameraNameCell);
+    newRow.appendChild(ipCell);
+    newRow.appendChild(latitudeCell);
+    newRow.appendChild(longitudeCell);
     newRow.appendChild(removeCell);
     
     // Append new row to the table
