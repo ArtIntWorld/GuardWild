@@ -7,6 +7,11 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from .models import*
 
+import cv2
+import tensorflow as tf
+import numpy as np
+import pickle
+
 import base64
 from datetime import datetime
 from django.core.files.storage import FileSystemStorage
@@ -169,6 +174,27 @@ def addanimal(request):
         a.save()
         return HttpResponse(f"<script>alert('Animal added successfully');window.location='/animallist'</script>")
     return render(request,"admin/addanimal.html")
+
+def viewcomplaint(request):
+    data = Complaint.objects.all().order_by('-date')  # Order by most recent
+    return render(request, 'admin/viewcomplaint.html', {'data': data})
+
+def submit_replies(request):
+    if request.method == "POST":
+        for key, value in request.POST.items():
+            if key.startswith("reply_"):
+                complaint_id = key.split("_")[1]  # Extract complaint ID
+                try:
+                    if value:    
+                        # Update the reply for the respective complaint
+                        complaint = Complaint.objects.get(id=complaint_id)
+                        complaint.reply = value
+                        complaint.status = 'replied'
+                        complaint.save()
+                except Complaint.DoesNotExist:
+                    return JsonResponse({'error': f'Complaint with ID {complaint_id} not found.'}, status=404)
+        return HttpResponse(f"<script>alert('Replied complaints successfully');window.location='/viewcomplaint'</script>")
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
 def updateanimal(request,id):
     data=Animals.objects.get(id=id)
@@ -588,4 +614,6 @@ def and_get_profile(request):
     data=[]
     data.append({'name': user.name,'password': user.password,'email': user.email,'phone': user.phone,'gender': user.gender,'photo': user.photo,'dob': user.dob,'city': user.city,'district': user.station.division.district.name,'station': user.station.name,'division': user.station.division.name})
     return JsonResponse({'status': 'ok', 'data': data})
+
+#************************************************** AI Model *********************************************************
 

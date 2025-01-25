@@ -47,6 +47,8 @@ urlpatterns = [
     path('approvestation/<id>',views.approvestation),
     path('deletestation/<id>',views.deletestation),
     path('stationlist',views.stationlist),
+    path('viewcomplaint', views.viewcomplaint, name='viewcomplaint'),
+    path('submit-replies/', views.submit_replies, name='submit_replies'),
 
     #--------------------STATION PAGE--------------------#
     path('station',views.station),
